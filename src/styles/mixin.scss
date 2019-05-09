@@ -1,0 +1,110 @@
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin scrollBar {
+  &::-webkit-scrollbar-track-piece {
+    background: #d3dce6;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #99a9bf;
+    border-radius: 20px;
+  }
+}
+
+@mixin relative {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+$zs: #409eff;
+
+/* 步骤栏样式 */
+.el-step__head.is-finish {
+  color: #409eff;
+}
+.el-step__title.is-finish {
+  color: grey;
+}
+.el-step__head.is-finish {
+  border-color: #409eff;
+}
+/* 字体图标 */
+.iconfont {
+  font-size: 34px !important;
+  font-weight:bold;
+}
+
+/* el-element 输入框 */
+.shopInput  {
+  width: 300px;
+}
+
+/* 店铺管理页面盒子 */
+.setUpShop {
+  width: 800px;
+  margin: 50px auto;
+}
+
+
+.headerForm {
+  position: relative;
+}
+
+.btnClick {
+  position: absolute;
+  right: 60px;
+}
+
+// 页面头部样式
+.el-row {
+  margin-bottom: 20px;
+  background-color: #f1f3f4;
+  padding: 20px 10px;
+  border-radius: 5px;
+}
+
+.secondLevel {
+  padding-bottom: 10px;
+}
+
+.clearfix:after{
+  content:"";
+  display:table;
+  height:0;
+  visibility:both;
+  clear:both;
+}
+
+.clearfix{
+*zoom:1;    /* IE/7/6*/
+}
+
+//上传图片盒子
+.upload-box {
+  width: 500px;
+  overflow:hidden;
+  .el-form-item {
+    float: left;
+    height: 144px;
+    width: 184px;
+  }
+}
+
+
+//上传图片文字
+.upload-img {
+  font-weight: bold;
+  color:#606266;
+  font-size: 14px;
+}
