@@ -30,6 +30,12 @@ module.exports = {
     },
 
     proxy: {
+      '/api': {
+        target: 'http://47.112.195.117',
+        pathRewrite: {'^/api' : ''},
+        // changeOrigin: true,
+        // secure: false,
+      },
       '/': {
         target: 'http://47.112.195.117/xmall-front-web',
         changeOrigin: true,

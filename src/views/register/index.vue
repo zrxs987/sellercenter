@@ -64,10 +64,10 @@ export default {
     return {
       isShow:false,
       reset: {
-        userName: 'Anet',
-        phoneNumber: '18870571880',
-        verificationCode: '123456',
-        password: '123456',
+        userName: '',
+        phoneNumber: '',
+        verificationCode: '',
+        password: '',
         checked:true,
       },
       codeTxt: '获取验证码',

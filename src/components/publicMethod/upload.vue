@@ -47,28 +47,33 @@ export default {
   },
 
     methods:{
+        //图片上传
+        // onUploadEvent(file,fileds){
+        //     console.log(file)
+        // },
         handleUpload(){
              this.$refs['excel-upload-input'].click()
         },
-   
         handleClick(e){
-            
-             const files = e.target.files[0];
-             const isLt2M = e.size / 1024 / 1024 < 10
-              if (isLt2M) {
-               this.$message.error('上传图片大小不能超过 10MB!请重新选择')
-               return ;
-              }
-         this.img = window.URL.createObjectURL(files); 
-  
-               this.$emit('on-Success',e)
-        },
 
-     UploadFile(){
-         getUploadFile().then((res)=>{
+            const files = e.target.files[0]
+            const formData = new FormData()
+            formData.append("fileName", files) //加入文件对象
+
+            const isLt2M = e.size / 1024 / 1024 < 10
+             if (isLt2M) {
+              this.$message.error('上传图片大小不能超过 10MB!请重新选择')
+              return ;
+             }
+               this.img = window.URL.createObjectURL(files); 
+
+              getUploadFile(formData).then((res) => {
+                
+                  console.log(res)
+              this.$emit('on-Success',res.data.url)
             
-        })
-        }
+            })
+        },
 
     },  
 }

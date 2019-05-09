@@ -60,10 +60,10 @@ export default {
     return {
       // 申请开店定义
     setUpShop: {
-        userName: '',
+        userName: '22',
         phoneNumber: '18870571898',
-        WechatID: '',
-        BusinessAddress:'',
+        WechatID: '222',
+        BusinessAddress:'22',
         business:'',
         account:'',
         identityCard:'',
@@ -106,23 +106,23 @@ export default {
   methods: {
 
     //上传营业执照
-    businessImgonSuccess(e) {
-      // console.log(e,'11')
-       this.setUpShop.business = e.target.files[0]
-       let para = getUploadFile( this.setUpShop.business)
-       console.log(para,'para')
+    businessImgonSuccess(key) {
+
+       this.setUpShop.business = key
+       console.log(this.setUpShop.business,'11')
+
     },
     //上传手持开户许可证
-    accountImgonSuccess (e) {
-       this.setUpShop.account = e.target.files[0]
+    accountImgonSuccess (key) {
+       this.setUpShop.account = key
     },
     //上传身份证正反面+手持
-    identityCardImgonSuccess (e) {
-       this.setUpShop.identityCard = e.target.files[0]
+    identityCardImgonSuccess (key) {
+       this.setUpShop.identityCard = key
     },
     //上传食品经营许可证
-    foodImgonSuccess (e) {
-       this.setUpShop.food = e.target.files[0]
+    foodImgonSuccess (key) {
+       this.setUpShop.food = key
     },
     
     // 按钮点击下一步
@@ -130,7 +130,7 @@ export default {
       this.$refs.setUpShop.validate(valid => {
         if (valid) {
              
-          let formData = new FormData( )
+          let formData = new FormData( this.applyRule )
             formData.append('storeJoininAddress',this.setUpShop.business)
             formData.append('businessLicense',this.setUpShop.account)
             formData.append('idCard',this.setUpShop.identityCard)
@@ -141,9 +141,10 @@ export default {
             formData.append('scId',this.setUpShop.BusinessAddress)
           
           for(var [key, value] of formData.entries()){
-          console.log(key, value);
+               console.log(key, value);
           }
- 
+
+      // let formData = Object.assign({}, this.setUpShop)
        getUploadData(formData).then((res)=>{
             console.log(res,'111')
           if(res.code ==='200'){

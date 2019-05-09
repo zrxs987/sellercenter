@@ -3,17 +3,20 @@
     <!-- 步骤栏 -->
     <progressBar :atPresent="5"/>
     <div class="contract">
-    <el-form label-width="80px"  enctype="multipart/form-data">
+    <el-form label-width="80px" v-model="contract" enctype="multipart/form-data">
 
         <el-form-item label="上传盖章后的合同" label-width="upload">
           <el-upload
+            v-model="contract.upload"
             class="avatar-uploader"
-            action="http://47.112.195.117/upload/file"
+            with-credentials
+             action="importFileUrl"
             :show-file-list="false"
+            :on-error="uploadError"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <img v-if="contract.upload" :src="contract.upload" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -41,14 +44,26 @@ export default {
   data() {
     return {
        upload:'100px',
-       imageUrl: ''
+       imageUrl: '',
+       importFileUrl:'http://47.112.195.117/upload/file',
+       contract:{
+           upload:'',
+       },
     }
+    
   },
   methods: {
     
      handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
-        console.log(file,'file')
+    
+       
+
+      },
+
+     uploadError() {
+
+        this.$message.error('上传失败，请重新上传')
+
       },
 
       beforeAvatarUpload(file) {
