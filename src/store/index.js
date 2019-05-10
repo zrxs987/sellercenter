@@ -17,7 +17,13 @@ const store = new Vuex.Store({
   },
   getters,
   plugins: [createPersistedState({
-    storage: sessionStorage
+    storage: localStorage,
+    reducer(val) {
+      return {
+         // 只储存state中的user
+         user: val.user
+      }
+    }
   })]
 })
 

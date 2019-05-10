@@ -6,7 +6,7 @@ import request from '@/utils/request'
 // 查省
 export function getAddressInfo(data,type) {
   return request({
-    url: 'area/selectAllProvinceArea',
+    url: '/xmall-front-web/area/selectAllProvinceArea',
     method: 'post',
     data:(type,data)
   })
@@ -15,7 +15,7 @@ export function getAddressInfo(data,type) {
 //查市
 export function getCity(data,type) {
   return request({
-    url: 'area/selectAllListByParentId',
+    url: '/xmall-front-web/area/selectAllListByParentId',
     method: 'post',
     data:(type,data)
   })
@@ -24,7 +24,7 @@ export function getCity(data,type) {
 // 查物流公司
 export function getLogisticsCompany(data) {
   return request({
-    url: 'express/select',
+    url: '/xmall-front-web/express/select',
     method: 'post',
     data:data
   })
@@ -33,7 +33,7 @@ export function getLogisticsCompany(data) {
 //修改订单状态
 export function getAmendOrder(data) {
   return request({
-    url: 'orders/modifyState',
+    url: '/xmall-front-web/orders/modifyState',
     method: 'post',
     data:data
   })
@@ -42,7 +42,7 @@ export function getAmendOrder(data) {
 //根据orderId查询订单扩展信息
 export function getOrders(data) {
   return request({
-    url: 'orders/getOrderCommomById',
+    url: '/xmall-front-web/orders/getOrderCommomById',
     method: 'post',
     data:data
   })
@@ -51,7 +51,7 @@ export function getOrders(data) {
 //商家状态订单
 export function getMerchantOrder (data) {
   return request({
-    url: 'orders/ordersState',
+    url: '/xmall-front-web/orders/ordersState',
     method: 'post',
     data:data
   })

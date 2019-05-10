@@ -6,7 +6,7 @@ import request from '@/utils/request';
 //待评价订单
 export function getEvaluate(data) {
   return request({
-    url: 'orders/evaluationState',
+    url: '/xmall-front-web/orders/evaluationState',
     method: 'post',
     params: data
   })
@@ -15,7 +15,7 @@ export function getEvaluate(data) {
 //最近三个月商家订单
 export function getRecentlyTrimester(data) {
   return request({
-    url: 'orders/getThreeMonthsOrder',
+    url: '/xmall-front-web/orders/getThreeMonthsOrder',
     method: 'post',
     params: data
   })

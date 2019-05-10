@@ -44,34 +44,55 @@ export default {
       isSucceedShow: false,
       // 申请开店定义
       setUpShop: {
-        userName: "",
-        phoneNumber: "",
-        WechatID: ""
+          uploading:'',
       },
-      setUpShopList: [
-
-      ]
+      setUpShopList: [],
+      uploadArr:[],
+         
     };
   },
   created() {
       this._getOrderId()
   },
   methods: {
-    bankImgonSuccess() {},
+    bankImgonSuccess( key ) {
+
+       this.uploadArr.push( key )
+ 
+    },
+
     //提交按钮
     handleSubmit() {
-      this.isShow = false;
-      this.isSucceedShow = true;
-      
-      setTimeout(() => {
-            this.$router.push({path:'./contract'});
-      
-        },2000)
+
+      let obj = {
+          scId:this.$route.query.scId,
+          foodProductionLicense:this.uploadArr,
+      }
+
+      getAptitude(obj).then((res)=>{
+         if(res.code ==='200'){
+                this.isShow = false;
+                this.isSucceedShow = true;
+
+               setTimeout(() => {
+                  this.$router.push({path:'./contract'});
+              },2000)
+          }else{
+               this.$message({
+                message: res.errorMsg,
+                type: 'error',
+                duration: 5 * 1000
+              })
+            }
+      })
+
     },
     // 取消按钮
     handleCancel() {
 
     },
+
+    //根据类型查询资质
     _getOrderId () {
         var scID = this.$route.query.scId
 
@@ -99,9 +120,9 @@ export default {
   width: 250px;
 
 }
-  .buttonBtn {
-     margin-left: 270px;
-  }
+.buttonBtn {
+  margin-left: 270px;
+}
 
 //审核
 .audit-box {

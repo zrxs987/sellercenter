@@ -4,7 +4,7 @@ import request from '@/utils/request';
 
 export function register(data) {
   return request({
-    url: 'seller/registered',
+    url: '/xmall-front-web/seller/registered',
     method: 'post',
     params: data
   })

@@ -5,7 +5,7 @@ import request from '@/utils/request';
 //修改商家地址
 export function getModificationAddress(data) {
   return request({
-    url: 'daddress/update',
+    url: '/xmall-front-web/daddress/update',
     method: 'post',
     params: data
   })
@@ -14,7 +14,7 @@ export function getModificationAddress(data) {
 //根据id查询商家地址
 export function getIdAddress(data) {
   return request({
-    url: 'daddress/getById',
+    url: '/xmall-front-web/daddress/getById',
     method: 'post',
     params: data
   })
@@ -23,7 +23,7 @@ export function getIdAddress(data) {
 //添加商家地址
 export function getBusinessAddress(data) {
   return request({
-    url: 'daddress/add',
+    url: '/xmall-front-web/daddress/add',
     method: 'post',
     params: data
   })
@@ -32,7 +32,7 @@ export function getBusinessAddress(data) {
 //查询商家地址
 export function getMerchantSite(data) {
   return request({
-    url: 'daddress/select',
+    url: '/xmall-front-web/daddress/select',
     method: 'post',
     params: data
   })
@@ -41,7 +41,7 @@ export function getMerchantSite(data) {
 //删除地址
 export function getDelete(data) {
   return request({
-    url: 'daddress/delete',
+    url: '/xmall-front-web/daddress/delete',
     method: 'post',
     params: data
   })
@@ -50,7 +50,7 @@ export function getDelete(data) {
 //设为默认地址
 export function getDefault(data) {
   return request({
-    url: 'daddress/updateByIsDefault',
+    url: '/xmall-front-web/daddress/updateByIsDefault',
     method: 'post',
     params: data
   })

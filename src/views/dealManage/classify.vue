@@ -374,6 +374,7 @@ export default {
       }
       li:hover{
         color: red;
+        cursor:pointer;
       }
       .longString{
         height: 20px;

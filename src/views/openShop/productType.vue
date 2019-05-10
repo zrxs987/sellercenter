@@ -166,55 +166,56 @@ export default {
   
   methods:{
     //上传营业执照
-   businessImgonSuccess( e) {
-       this.productType.business = e.target.files[0]
+   businessImgonSuccess( key) {
+       this.productType.business = key
     },
     //上传商标注册证
-   brandImgonSuccess(e ) {
-       this.productType.brand = e.target.files[0]
+   brandImgonSuccess( key ) {
+       this.productType.brand = key
     },
     //上传检验报告
-   checkoutImgonSuccess(e ) {
-       this.productType.checkout = e.target.files[0]
+   checkoutImgonSuccess(key) {
+       this.productType.checkout = key
     },
     //上传开户许可证
-   accountImgonSuccess( e) {
-       this.productType.account = e.target.files[0]
+   accountImgonSuccess( key) {
+       this.productType.account = key
     },
     //上传生产许可证
-   productionImgonSuccess(e ) {
-       this.productType.production = e.target.files[0]
+   productionImgonSuccess( key ) {
+       this.productType.production = key
     },
     //上传云端商城授权书
-   cloudImgonSuccess(e ) {
-       this.productType.cloud = e.target.files[0]
+   cloudImgonSuccess( key ) {
+       this.productType.cloud = key
     },
     //上传含税，含物流价格表
-   tallageImgonSuccess(e ) {
-      this.productType.tallage = e.target.files[0]
+   tallageImgonSuccess( key ) {
+      this.productType.tallage = key
     },
     //上传代加工企业营业执照
-   OEMImgonSuccess(e ) {
-        this.productType.OEM = e.target.files[0]
+   OEMImgonSuccess( key ) {
+        this.productType.OEM = key
     },
     //上传代加工企业生产许可证
-   OEMSImgonSuccess(e ) {
-       this.productType.OEMS = e.target.files[0]
+   OEMSImgonSuccess( key ) {
+       this.productType.OEMS = key
     },
     //点击提交按钮
     handleSubmit( ) {
        this.$refs.productType.validate(res => {
         if (res) {
 
-            //  var applyFor=JSON.parse(window.sessionStorage.getItem('applyFor'))
-            //   console.log(applyFor,'applyFor',789457)
-              
+           this.storeInformation = window.sessionStorage.getItem('storeInformation')
+           
              let obj = {
                  storeJoinin1Id:1,
                  scId:this.productType.radio,
                  companyName:this.productType.companyName,
                  productName:this.productType.modelName,
                  companyPhone:this.productType.phoneNumber,
+                 memberId:this.storeInformation,
+                 sellerId:this.$store.state.user.sellerId,
 
                  companyBusinessLicense:this.productType.business,
                  companyRegistrationCertificate:this.productType.brand,
@@ -227,28 +228,7 @@ export default {
                  generationCompanyProductionLicense:this.productType.OEMS,
               }
 
-              // let formData = new FormData()
-              // formData.append('storeJoinin1Id',1)
-              // formData.append('scId',this.productType.radio)
-              // formData.append('companyName',this.productType.companyName)
-              // formData.append('productName',this.productType.modelName)
-              // formData.append('companyPhone',this.productType.phoneNumber)
-
-              // formData.append('companyBusinessLicense',this.business)
-              // formData.append('companyRegistrationCertificate',this.brand)
-              // formData.append('companyInspectionReport',this.checkout)
-              // formData.append('companyAccountPermit',this.account)
-              // formData.append('companyProductionLicense',this.production)
-              // formData.append('mallAuthorization',this.cloud)
-              // formData.append('generationCompanyBusinessLicense',this.tallage)
-              // formData.append('companyPriceTable',this.OEM )
-              // formData.append('generationCompanyProductionLicense',this.OEMS)
-              
-              // for(var [key, value] of formData.entries()){
-              //   console.log(key, value);
-              //   }
-
-             getProductType( obj).then(( res )=>{
+             getProductType( obj ).then(( res )=>{
                    console.log(res,'res')
                 if(res.code ==='200'){
                   setTimeout(() => {
@@ -264,7 +244,7 @@ export default {
                         message: res.errorMsg,
                         type: 'error',
                         duration: 5 * 1000
-                      })
+                    })
                   }
                })
               

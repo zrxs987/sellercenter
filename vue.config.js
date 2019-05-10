@@ -37,7 +37,7 @@ module.exports = {
         // secure: false,
       },
       '/': {
-        target: 'http://47.112.195.117/xmall-front-web',
+        target: 'http://47.112.195.117',
         changeOrigin: true,
         secure: false,
       },

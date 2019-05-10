@@ -28,15 +28,17 @@ export default {
         show: {
            type: Boolean,
            default: true
-         },
-      title: {
-        type: String,
-        default: '个人头像'
         },
-      styles:{
-         type: String,
-        default: ''
-       }
+
+        title: {
+            type: String,
+            default: '个人头像'
+        },
+            
+        styles:{
+            type: String,
+            default: ''
+        }
   },
 
   data(){
@@ -47,13 +49,11 @@ export default {
   },
 
     methods:{
-        //图片上传
-        // onUploadEvent(file,fileds){
-        //     console.log(file)
-        // },
+
         handleUpload(){
-             this.$refs['excel-upload-input'].click()
+             this.$refs['excel-upload-input'].click()           
         },
+
         handleClick(e){
 
             const files = e.target.files[0]
@@ -66,11 +66,24 @@ export default {
               return ;
              }
                this.img = window.URL.createObjectURL(files); 
-
+              //把图片转成字符串
               getUploadFile(formData).then((res) => {
-                
-                  console.log(res)
-              this.$emit('on-Success',res.data.url)
+
+                    if(res.code ==='200'){
+                         this.$emit('on-Success',res.data.url)
+                          this.$message({
+                            message: '上传成功',
+                            type: 'success',
+                            duration: 2 * 1000
+                        })
+                    }else{
+                        this.$message({
+                            message: res.errorMsg,
+                            type: '上传失败，请重新上传',
+                            duration: 2 * 1000
+                        })
+                    } 
+                //   console.log(res)
             
             })
         },

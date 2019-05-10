@@ -3,24 +3,13 @@
     <!-- 步骤栏 -->
     <progressBar :atPresent="5"/>
     <div class="contract">
-    <el-form label-width="80px" v-model="contract" enctype="multipart/form-data">
-
-        <el-form-item label="上传盖章后的合同" label-width="upload">
-          <el-upload
-            v-model="contract.upload"
-            class="avatar-uploader"
-            with-credentials
-             action="importFileUrl"
-            :show-file-list="false"
-            :on-error="uploadError"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-            >
-            <img v-if="contract.upload" :src="contract.upload" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
+    <el-form label-width="80px" v-model="uploading"  enctype="multipart/form-data">
+      <div class="upload-box clearfix">
+        <el-form-item label>
+          <span class="upload-img">上传盖章后的合同</span>
+          <upload :show="false" @on-Success="contractImgonSuccess"/>
         </el-form-item>
-
+      </div>
       <div class="buttonBtn">
         <el-button type="primary" @click="handleCancel()">取消</el-button>
         <el-button type="primary" @click="handleSubmit()">提交</el-button>
@@ -31,58 +20,55 @@
 </template>
 
 <script>
-// import upload from "@/components/publicMethod/upload";
+import upload from "@/components/publicMethod/upload";
 import progressBar from "@/components/publicMethod/progressBar";
 import { getaddContract } from "@/api/openShop";
 
 export default {
   name:'contract',
   components: {
-    // upload,
+    upload,
     progressBar
   },
   data() {
     return {
-       upload:'100px',
-       imageUrl: '',
-       importFileUrl:'http://47.112.195.117/upload/file',
-       contract:{
-           upload:'',
-       },
+      uploading:{
+         //盖章的合同
+         contract:'',
+      },
     }
-    
   },
   methods: {
+    //取消
+    handleCancel() {
+
+    },
+    //上传盖章后的合同
+    contractImgonSuccess( key ) {
+       this.uploading.contract = key
+    },
     
-     handleAvatarSuccess(res, file) {
-    
+    //提交
+    handleSubmit() {
        
+       let obj = {
+         contract:this.uploading.contract,
+       }
 
-      },
-
-     uploadError() {
-
-        this.$message.error('上传失败，请重新上传')
-
-      },
-
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
-      },
-
-      sendFile( param ) {
-
-      },
-    
+      getaddContract(obj).then((res)=>{
+        if(res.code === '200'){
+             setTimeout(() => {
+               this.$router.push({path:'./shopSucceed'}); 
+        }, 2000)
+        }else{
+               this.$message({
+                message: res.errorMsg,
+                type: 'error',
+                duration: 5 * 1000
+              })
+            }
+        })
+    },
   }
 };
 </script>
@@ -93,38 +79,28 @@ export default {
   height: 400px;
   margin: 100px auto;
 }
-
+.el-form {
+  margin-left: 80px;
+}
 .el-steps {
   margin-top: 80px;
 }
 
 .buttonBtn {
-  margin-left: 120px;
+  margin-left: 60px;
 }
-
-/deep/.avatar-uploader .el-upload {
-border: 1px dashed #d9d9d9;
-border-radius: 6px;
-cursor: pointer;
-position: relative;
-overflow: hidden;
+.upload-img {
+  margin-left: -60px;
+  line-height: 50px;
 }
-
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 148px;
-  height: 148px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 148px;
-  height: 148px;
-  display: block;
+.upload-box {
+  width: 500px;
+  margin-top: 50px;
+  margin: 0 auto;
+   .el-form-item {
+       width: 210px;
+       height: 150px;
+   } 
 }
 
 </style>

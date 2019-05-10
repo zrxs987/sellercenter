@@ -20,6 +20,7 @@
           <div class="upload-box clearfix">
             <el-form-item label>
               <span class="upload-img">上传营业执照</span>
+              <input style="display:none;" v-model="setUpShop.test">
               <upload :show="false" @on-Success="businessImgonSuccess" />
             </el-form-item>
             <el-form-item label="" >
@@ -68,7 +69,9 @@ export default {
         account:'',
         identityCard:'',
         food:'',
+        test:'',
       },
+      storeInformation:'',
       //申请开店规则
     applyRule: {
       userName: [
@@ -107,19 +110,20 @@ export default {
 
     //上传营业执照
     businessImgonSuccess(key) {
-
        this.setUpShop.business = key
-       console.log(this.setUpShop.business,'11')
 
     },
+
     //上传手持开户许可证
     accountImgonSuccess (key) {
        this.setUpShop.account = key
     },
+
     //上传身份证正反面+手持
     identityCardImgonSuccess (key) {
        this.setUpShop.identityCard = key
     },
+
     //上传食品经营许可证
     foodImgonSuccess (key) {
        this.setUpShop.food = key
@@ -129,25 +133,27 @@ export default {
     handleSubmit() {
       this.$refs.setUpShop.validate(valid => {
         if (valid) {
-             
-          let formData = new FormData( this.applyRule )
-            formData.append('storeJoininAddress',this.setUpShop.business)
-            formData.append('businessLicense',this.setUpShop.account)
-            formData.append('idCard',this.setUpShop.identityCard)
-            formData.append('accountOpeningPermit',this.setUpShop.food)
-            formData.append('storeJoininName',this.setUpShop.userName)
-            formData.append('storeJoininMobile',this.setUpShop.phoneNumber)
-            formData.append('storeJoininWx',this.setUpShop.WechatID)
-            formData.append('scId',this.setUpShop.BusinessAddress)
-          
-          for(var [key, value] of formData.entries()){
-               console.log(key, value);
+
+          let obj= {
+                sellerId: this.$store.state.user.sellerId,
+                businessLicense:this.setUpShop.business,
+                accountOpeningPermit:this.setUpShop.account,
+                idCard:this.setUpShop.identityCard,
+                operatingLicense:this.setUpShop.food,
+                storeJoininName:this.setUpShop.userName,
+                storeJoininMobile:this.setUpShop.phoneNumber,
+                storeJoininWx:this.setUpShop.WechatID,
+                storeJoininAddress:this.setUpShop.BusinessAddress,
           }
 
-      // let formData = Object.assign({}, this.setUpShop)
-       getUploadData(formData).then((res)=>{
-            console.log(res,'111')
+       getUploadData(obj).then((res)=>{
+
           if(res.code ==='200'){
+
+            this.storeInformation = res.data
+            var storeInformations = JSON.stringify(this.storeInformation)
+            window.sessionStorage.setItem('storeInformation',storeInformations)
+
                this.$router.push({
                      path:'./productType'
                  }); 

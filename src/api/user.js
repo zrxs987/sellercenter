@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: 'seller/enter',
+    url: '/xmall-front-web/seller/enter',
     method: 'post',
     data
   })
@@ -10,7 +10,7 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: 'seller/enter',
+    url: '/xmall-front-web/seller/enter',
     method: 'get',
     params: { token }
   })
@@ -18,7 +18,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: 'seller/enter',
+    url: '/xmall-front-web/seller/enter',
     method: 'post'
   })
 }

@@ -6,7 +6,7 @@ import request from '@/utils/request'
 //商家评价管理
 export function getEvaluateInfo(data) {
     return request({
-      url: '/evaluateGoods/selectGetByStoreId',
+      url: '/xmall-front-web/evaluateGoods/selectGetByStoreId',
       method: 'post',
       data:data
     })
@@ -15,7 +15,7 @@ export function getEvaluateInfo(data) {
 //商家评价统计
 export function getStatistics(data) {
     return request({
-      url: '/evaluateGoods/buyerScoreStatistics',
+      url: '/xmall-front-web/evaluateGoods/buyerScoreStatistics',
       method: 'post',
       data:data
     })
