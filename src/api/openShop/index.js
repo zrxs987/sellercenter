@@ -65,3 +65,13 @@ export function getUploadFile(data) {
     return upload.post('/upload/uploadFile',data)   
   }
   
+
+//获取storeId
+export function getStoreId(data) {
+    return request({
+      url: '/xmall-front-web/store/selectByMemberId',
+      method: 'post',
+      data:(data)
+    })
+  }
+  

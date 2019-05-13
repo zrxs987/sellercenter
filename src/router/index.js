@@ -412,7 +412,7 @@ export const constantRoutes = [
   name: 'personalDetails',
   alwaysShow: true ,
   meta: {
-    title: '个人信息',
+    title: '店铺信息',
     icon: 'user'
   },
   children: [
@@ -420,7 +420,7 @@ export const constantRoutes = [
       path: 'personalData',
       component: () => import('@/views/personalDetails/personalData'),
       name: 'personalData',
-      meta: { title: '个人资料' },
+      meta: { title: '店铺资料' },
     },
   ]
 },

@@ -149,22 +149,30 @@ export default {
   name:'evaluateInfo',
   data() {
     return {
-      list: [],
+      evaluate: {},
       activeName:'second',
-      
     };
   },
 
  created() { 
-    this._getEvaluateInfo();
+    this._getEvaluateInfo()
+    this.fetchData()
   },
 
  methods:{
+      fetchData(){
+         getStatistics({gevalStoreid:3}).then((res)=>{
+              
+              this.evaluate = res.data
+              console.log(this.evaluate,788)
+         })
+      },
+
      _getEvaluateInfo(){
            
-        // getEvaluateInfo({gevalStoreid:'1'}).then((res)=>{
-        //    console.log(res,11111111)
-        // }) 
+        getEvaluateInfo({gevalStoreid:15}).then((res)=>{
+          //  console.log(res,11111111)
+        }) 
      },
      //tab切换
      handleClick(tab, event) {

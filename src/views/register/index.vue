@@ -101,7 +101,6 @@ export default {
                       type:'error',
                       duration: 1500
                   })
-                  // this.reset.phoneNumber = ""
               }
           },
         //密码验证
@@ -118,7 +117,6 @@ export default {
                 type: 'error',
                 duration: 1500
               })
-              // this.reset.password = ""
             }
           },
         //获取验证码
@@ -176,9 +174,13 @@ export default {
               memberEmail:this.reset.verificationCode,
           }
           register(obj).then(res=>{
-            
-            //  console.log(res)
-             if(res.code ==='200'){
+        
+          if(res.code ==='200'){
+              this.$message({
+                message: '注册成功',
+                type:'success',
+                duration: 1500
+            })
              setTimeout(() => {
                this.$router.push('./login');
             }, 1000)          
@@ -189,15 +191,8 @@ export default {
                 duration: 5 * 1000
               })
            }
-       }) .catch(() => {
-          
-     })
-      this.reset = { }
-      this.reset.checked =''
-      // {
-      //   password:123456,
-      //   userName:15119716813
-      // }
+         }) .catch(() => {
+      })
      }
     },
     //点击购买协议

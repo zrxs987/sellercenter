@@ -129,10 +129,10 @@ export default {
           this.$store.dispatch("user/login",this.loginForm)
 
            .then(() => {
-            //  if(response.code ==='200') {
+            //  if(res.code ==='200') {
                   this.$router.push({ path: '/' })
                   this.loading = false
-              // }            
+              // }
             })
             .catch(() => {
               this.loading = false

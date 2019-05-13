@@ -2,8 +2,8 @@
   <div class="app-container">
  <div class="filter-container">
       <el-row >
-          <!-- <el-col :span="24" > -->
-            <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
+      
+            <!-- <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
                <el-col :span="6"  >
                  <span>结算时间：</span>
                     <el-date-picker
@@ -33,13 +33,13 @@
                 <el-button type="primary"   @click="handleReset">重置</el-button>
                 <el-button type="primary"  @click="handleInquire">查询</el-button>
               </div>
-            </el-form>
+            </el-form>  -->
         </el-row>
     </div>
 
     <el-table
       ref="multipleTable"
-      :data="list"
+      :data="tableData"
       element-loading-text="拼命加载中"
       border
       fit
@@ -89,8 +89,8 @@
 </template>
 
 <script>
-// import { fetchList } from '@/api/article'
 import pagination from '@/components/Pagination/index'
+import { getClearingList } from "@/api/clearing";
 
 export default {
   name: 'openOrder',
@@ -99,12 +99,8 @@ export default {
   },
   data() {
     return {
-      list: null,
+      tableData: null,
       listLoading: true,
-      multipleSelection: [],
-      downloadLoading: false,
-      filename: '',
-      quantumTime:'',
       //下拉框
       fixOrderListPara:{
           status:'',
@@ -122,7 +118,9 @@ export default {
   },
   methods: {
     fetchData() {
- 
+       getClearingList({storeId:3,settlementStatus:2}).then((res)=>{
+            this.tableData = res.data
+       })
     },
     //年月日时间
     changeStartTime() {

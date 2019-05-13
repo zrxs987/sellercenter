@@ -35,7 +35,7 @@
 
 <script>
 import progressBar from "@/components/publicMethod/progressBar";
-import { getaddShopsInfo } from "@/api/openShop";
+import { getaddShopsInfo,getStoreId } from "@/api/openShop";
 
 export default {
   name:'shopSucceed',
@@ -80,10 +80,12 @@ export default {
      }
    },
   methods: {
+    
     //添加商品
   getaddShop() {
        this.dialogFormVisible = true
     },
+
     // 提交按钮
   handleModifyPwd() {
      this.$refs.formProduct.validate(res => {
@@ -96,11 +98,13 @@ export default {
             }
             getaddShopsInfo(obj).then((res)=>{
                 if(res.code === '200'){
+                      this.storeId()
                       this.$message({
                     message: res.errorMsg,
                     type: 'success',
                     duration: 5 * 1000
                   })
+                  
                 }else{
               this.$message({
                 message: res.errorMsg,
@@ -118,6 +122,13 @@ export default {
     handleCloseSystemInfo() {
          this.$refs.formProduct.resetFields();
          this.formProduct = {}
+    },
+
+    //获取storeId
+    storeId() {
+        getStoreId().then((res)=>{
+        console.log(res,'res')
+      })
     },
 
   }

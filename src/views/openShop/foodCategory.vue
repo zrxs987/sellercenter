@@ -58,7 +58,7 @@ export default {
     bankImgonSuccess( key ) {
 
        this.uploadArr.push( key )
- 
+      
     },
 
     //提交按钮
@@ -66,9 +66,9 @@ export default {
 
       let obj = {
           scId:this.$route.query.scId,
-          foodProductionLicense:this.uploadArr,
+          foodProductionLicense:JSON.stringify(this.uploadArr),
       }
-
+ 
       getAptitude(obj).then((res)=>{
          if(res.code ==='200'){
                 this.isShow = false;
@@ -83,13 +83,13 @@ export default {
                 type: 'error',
                 duration: 5 * 1000
               })
-            }
+          }
       })
 
     },
     // 取消按钮
     handleCancel() {
-
+       
     },
 
     //根据类型查询资质

@@ -25,6 +25,7 @@
               placeholder="请选择省"
               v-model="systemInformation.province"
               @change="handleSelectProvince"
+              style="width:30%;"
               clearable
             >
               <el-option
@@ -40,6 +41,7 @@
               placeholder="请选择市"
               v-model="systemInformation.city"
               @change="handleSelectCounty"
+              style="width:30%;"
               clearable
             >
               <el-option
@@ -53,6 +55,7 @@
               size="small"
               placeholder="请选择区"
               v-model="systemInformation.district"
+              style="width:30%;"
               clearable
             >
               <el-option
@@ -73,7 +76,7 @@
               v-model="systemInformation.site"
             ></el-input>
           </el-form-item>
-          <el-button type="primary" @click="handleInquire">完成</el-button>
+          <el-button type="primary" @click="handleInquire">添加</el-button>
           <el-button type="primary" @click="handleReset">重置</el-button>
         </el-form>
       </el-row>
@@ -127,6 +130,7 @@ import {
   getLogisticsCompany,
   getMerchantOrder,
 } from "@/api/level3Linkage.js";
+import { getBusinessAddress } from "@/api/locationManage";
 import pagination from "@/components/Pagination/index";
 
 export default {
@@ -162,6 +166,9 @@ export default {
       },
       vals: "",
       tableData: [],
+      tableSelectData:[],
+      //勾选id
+      paySnId:'',
     };
   },
 
@@ -206,15 +213,47 @@ export default {
     },
 
     //表格勾选
-    handleSelectionChange( val ) {
-       this.tableSelectData = val;
-       console.log(this.tableSelectData,'tableSelectData')
+    handleSelectionChange( row ) {
+       this.tableSelectData = row;
+          let idArr = [];
+          this.tableSelectData.forEach(item => {
+              idArr.push(item.paySn)
+          });
+          this.paySnId = idArr.join(',')
     },
 
-    //查询按钮
+    //添加
     handleInquire() {
-
+        let obj = {
+          areaId:this.systemInformation.province,
+          cityId:this.systemInformation.city,
+          address:this.systemInformation.site,
+          expressage:this.systemInformation.expressage,
+          paySn:this.paySnId,
+        }
+        getBusinessAddress( obj ).then((res)=>{
+          
+            if (!this.tableSelectData.length) {
+                  this.$message.warning("请先勾选数据！");
+                  return;
+              }
+             else if(res.code === '200'){
+                 this.$message({
+                  message: res.errorMsg,
+                  type: "success",
+                  duration: 5 * 1000
+            });
+               this.systemInformation = {}
+             }else {
+                this.$message({
+                  message: res.errorMsg,
+                  type: "error",
+                  duration: 5 * 1000
+            });
+          }
+        })
     },
+
     // 重置按钮
     handleReset() {
       this.systemInformation = {};

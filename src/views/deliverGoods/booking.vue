@@ -178,5 +178,6 @@ export default {
 
 .location {
     color: #FF6464;
+    cursor: pointer;
 }
 </style>

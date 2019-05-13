@@ -37,6 +37,7 @@
             </el-form-item>
           </div>
           <div class="buttonBtn">
+          
             <el-button type="primary" @click="handleCancel()">取消</el-button>
             <el-button type="primary" @click="handleSubmit()">提交</el-button>
           </div>
@@ -149,7 +150,6 @@ export default {
        getUploadData(obj).then((res)=>{
 
           if(res.code ==='200'){
-
             this.storeInformation = res.data
             var storeInformations = JSON.stringify(this.storeInformation)
             window.sessionStorage.setItem('storeInformation',storeInformations)

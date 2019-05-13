@@ -201,6 +201,7 @@ export default {
    OEMSImgonSuccess( key ) {
        this.productType.OEMS = key
     },
+    
     //点击提交按钮
     handleSubmit( ) {
        this.$refs.productType.validate(res => {

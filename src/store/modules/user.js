@@ -38,6 +38,7 @@ const actions = {
       }
       login({...obj}).then(response => {
         
+        
         const data = response.data
 
         commit('SET_TOKEN', data.token)

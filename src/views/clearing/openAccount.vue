@@ -3,7 +3,7 @@
  <div class="filter-container">
       <el-row >
           <!-- <el-col :span="24" > -->
-            <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
+            <!-- <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
                <el-col :span="6"  >
                  <span>成交时间：</span>
                     <el-date-picker
@@ -34,13 +34,13 @@
                 <el-button type="primary"  @click="handleInquire">查询</el-button>
                 <el-button type="primary"  @click="handleDownload">导出</el-button>
               </div>
-            </el-form>
+            </el-form> -->
         </el-row>
     </div>
 
     <el-table
       ref="multipleTable"
-      :data="list"
+      :data="tableData"
       element-loading-text="拼命加载中"
       border
       fit
@@ -49,52 +49,31 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" align="center" />
-      <el-table-column align="center" label="订单编号" width="150">
-        <template slot-scope="scope">
-          {{ scope.$index }}
-        </template>
+      <el-table-column align="center" label="订单编号" width="260" prop="orderSn">
       </el-table-column>
-      <el-table-column label="收货人" width="136" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
+      <el-table-column label="收货人" align="center" prop="buyerName">
       </el-table-column>
-      <el-table-column label="商品名称" width="220" align="center">
-        <template slot-scope="scope">
-          <el-tag>{{ scope.row.author }}</el-tag>
-        </template>
+      <el-table-column label="商品名称" width="220" align="center" prop="goodsName">
       </el-table-column>
-      <el-table-column label="金额" width="115" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
+      <el-table-column label="金额"  align="center" prop="goodsAmount">
       </el-table-column>
-      <el-table-column align="center" label="订单状态" width="160">
-        <template slot-scope="scope">
-          <span>{{ scope.row.disp }}</span>
-        </template>
+      <el-table-column align="center" label="订单状态" prop="orderState">
       </el-table-column>
-      <el-table-column align="center" label="发货状态" width="160">
-        <template slot-scope="scope">
-          <span>{{ scope.row.displ }}</span>
-        </template>
+      <el-table-column align="center" label="发货状态">
+
       </el-table-column>
-      <el-table-column align="center" label="配送状态" width="160">
-        <template slot-scope="scope">
-          <span>{{ scope.row.display}}</span>
-        </template>
+      <el-table-column align="center" label="配送状态" >
+
       </el-table-column>
-      <el-table-column align="center" label="结算状态" width="160">
-        <template slot-scope="scope">      
-          <span>{{ scope.row.disptime }}</span>
-        </template>
+      <el-table-column align="center" label="结算状态" >
+          <template slot_scope="scope">
+            <span>未结算</span>
+          </template>
       </el-table-column>
-            <el-table-column align="center" label="成交时间" width="180">
-        <template slot-scope="scope">  
-          <span>{{ scope.row.time }}</span>
-        </template>
+       <el-table-column align="center" label="成交时间" prop="finnshedTime">
+
       </el-table-column>
-      <el-table-column align="center" label="操作" width="180">
+      <el-table-column align="center" label="操作" >
         <template slot-scope="scope">
           <span style="color: rgb(25, 211, 197);cursor:pointer;margin-left: 0;" class="line"  @click="handelDelete(scope.row)" >删除</span>
         </template>
@@ -105,7 +84,7 @@
 </template>
 
 <script>
-// import { fetchList } from '@/api/article'
+import { getClearingList } from "@/api/clearing";
 import pagination from '@/components/Pagination/index'
 
 export default {
@@ -115,7 +94,7 @@ export default {
   },
   data() {
     return {
-      list: null,
+      tableData: null,
       listLoading: true,
       multipleSelection: [],
       downloadLoading: false,
@@ -138,7 +117,30 @@ export default {
   },
   methods: {
     fetchData() {
- 
+          getClearingList({storeId:3,settlementStatus:1}).then((res)=>{
+             
+            if (res.code === "200") {
+              this.loading = false;
+              res.data = res.data.map( item => {
+                return {
+                  ...item,
+                  goodsName: item.orderGoodsList.length == 0 ? '' : item.orderGoodsList[0].goodsName
+                  
+                }
+              })
+              this.tableData = res.data;
+              // this.fixOrderTotal = res.data.data.total;
+            } else {
+              this.$message({
+                message: res.errorMsg,
+                type: "error",
+                duration: 5 * 1000
+              });
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
     },
 
     //年月日时间
