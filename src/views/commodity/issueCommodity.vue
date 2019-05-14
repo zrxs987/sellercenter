@@ -9,19 +9,16 @@
         <el-form-item label="商品名称" prop="goodsName">
           <el-input  v-model="issue.goodsName" placeholder="请输入商品名称" style="width:360px;" clearable ></el-input>
         </el-form-item >
-        <!-- prop="selectedOptions" -->
+
           <el-form-item label="选择分类" > 
-            <div class="block">
               <el-cascader
-                style="width:360px;"
-                placeholder="请选择商品类目"
-                :options="options"
-                clearable 
-                @change="handleChange"
-                :props='prop'
-                >
-              </el-cascader>
-            </div>
+              style="width:360px;"
+              placeholder="请选择商品类目"
+              :options="options"
+              clearable 
+              @active-item-change="handleChange"
+              :props="prop"
+            ></el-cascader>
           </el-form-item>
 
          <el-form-item label="商品品牌" prop="brand">
@@ -99,8 +96,11 @@
           <el-form-item label="零售价" prop="WechatID">
             <el-input class="shopInput" placeholder="请输入零售价" v-model="issue.WechatID" clearable style="width:360px;"></el-input>
           </el-form-item>
-            <el-form-item label="类别信息" prop="categoryInfo">
-               <el-input type="textarea" placeholder="请输入类别信息" class="site" v-model="issue.categoryInfo" size="medium" :rows="5" resize="none"></el-input>
+          <el-form-item label="商品积分" prop="integral">
+            <el-input class="shopInput" placeholder="请输入商品积分" v-model="issue.integral" clearable style="width:360px;"></el-input>
+          </el-form-item>
+            <el-form-item label="商品描述" prop="categoryInfo">
+               <el-input type="textarea" placeholder="请输入商品描述" class="site" v-model="issue.categoryInfo" size="medium" :rows="5" resize="none"></el-input>
            </el-form-item> 
           <div class="upload-box clearfix">
             <el-form-item label>
@@ -223,6 +223,13 @@ export default {
             trigger: "blur"
            }
         ],
+        integral: [
+            {
+            required: true,
+            message: "带*号不能为空",
+            trigger: "blur"
+           }
+        ],
       }
     };
   },
@@ -252,6 +259,11 @@ export default {
               goodsJingle:this.textImg,
               goodsBody:this.issue.categoryInfo,
               brandId:this.issue.brand,
+              areaid1:this.issue.province,
+              areaid2:this.issue.city,
+              areaid3:this.issue.district,
+              storeId:this.$store.state.user.storeId,
+              score:this.issue.integral
             }
              getIssue( obj ).then((res)=>{
                   if(res.code === '200'){
@@ -316,7 +328,6 @@ export default {
             areaParentId:this.optionList.cityList[val].areaId,
             type: "3"
        }).then(res => {
-
        this.optionList.districtList = res.data;
     });
     },
@@ -324,31 +335,27 @@ export default {
     // 选择分类
     firstData(){
 
-      getClassify().then(res=>{
-         this.options = res.data
-
-         
-      })
-
-
+        getClassify().then(res=>{
+          this.options = res.data
+        })
     },
 
-  
-    handleChange(val) {
-      //  getClassifyCut({gcParentId:1}).then((res)=>{
+  //下级分类
+    handleChange( val) {
+      //  getClassifyCut({gcParentId:val}).then((res)=>{
       //    let firstData = this.options
       //    firstData[val[0]].children = res.data
       //    this.getClassifyList()
       //  })
     },
 
-    getClassifyList(gcParentId) {
-       getClassifyCut({gcParentId}).then((res)=>{
-         let firstData = this.options
-         firstData[val[0]].children = res.data
-          console.log(firstData)
-       })
-    },
+    // getClassifyList(gcParentId) {
+    //    getClassifyCut({gcParentId}).then((res)=>{
+    //      let firstData = this.options
+    //      firstData[val[0]].children = res.data
+    //       console.log(firstData)
+    //    })
+    // },
 
     //商品品牌
     handleBrand(){     

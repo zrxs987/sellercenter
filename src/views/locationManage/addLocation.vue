@@ -1,18 +1,15 @@
 <template>
   <div>
     <div class="personalData">
-  
       <el-form ref="personalData" :model="personalData" :rules="personalDataRule"  label-width="100px">
 
-        <!-- <el-form-item label="地址详情" prop="adventure">
-             <el-input type="textarea" :rows="2" resize="none"  placeholder="请填写省/市/区"  v-model="personalData.adventure"></el-input>
-        </el-form-item> -->
        <el-form-item label="退货地址" :label-width="formLabelWidth" class="threeLevel" prop="">
             <el-select
               size="small"
               placeholder="请选择省"
               v-model="personalData.province"
               @change="handleSelectProvince"
+              style="width: 118px;"
               clearable
             >
               <el-option
@@ -28,6 +25,7 @@
               placeholder="请选择市"
               v-model="personalData.city"
               @change="handleSelectCounty"
+              style="width: 118px;"
               clearable
             >
               <el-option
@@ -41,6 +39,7 @@
               size="small"
               placeholder="请选择区"
               v-model="personalData.district"
+              style="width: 118px;"
               clearable
             >
               <el-option
@@ -53,16 +52,16 @@
           </el-form-item>
     
         <el-form-item label="详细地址" prop="location">
-             <el-input type="textarea" :rows="3" resize="none" placeholder="请输入详细信息,如街道,小区,楼栋号"  v-model="personalData.location"></el-input>
+             <el-input type="textarea" :rows="3" resize="none" placeholder="请输入详细信息,如街道,小区,楼栋号" style="width: 360px;"  v-model="personalData.location"></el-input>
         </el-form-item>
         <el-form-item label="邮政编码" >
-          <el-input placeholder="请填写邮编" v-model="personalData.postalService"></el-input>
+          <el-input placeholder="请填写邮编" style="width: 360px;" v-model="personalData.postalService"></el-input>
         </el-form-item>
         <el-form-item label="收货人姓名" prop="consignee">
-          <el-input placeholder="请填写收货人姓名" v-model="personalData.consignee"></el-input>
+          <el-input placeholder="请填写收货人姓名" style="width: 360px;" v-model="personalData.consignee"></el-input>
         </el-form-item>
         <el-form-item label="手机号码" prop="phoneNumber">
-          <el-input placeholder="请填写手机号码" v-model="personalData.phoneNumber"></el-input>
+          <el-input placeholder="请填写手机号码" style="width: 360px;" v-model="personalData.phoneNumber"></el-input>
         </el-form-item>
           <el-form-item label="" >
           <el-checkbox-group v-model="personalData.type">
@@ -180,7 +179,7 @@ export default {
           cityList: [],
           districtList: []
       },
-     //申请开店规则
+     //地址规则
     personalDataRule: {
       adventure: [
                {
@@ -389,12 +388,11 @@ handleSelectCounty(val) {
         getCity({
         areaParentId:this.optionList.cityList[val].areaId,
         type: "3"
-    }).then(data => {
-    this.optionList.districtList = data.data;
-  });
-},
+     }).then(data => {
+      this.optionList.districtList = data.data;
+   });
+ },
 
-    
   }  
 };
 </script>
@@ -407,24 +405,15 @@ handleSelectCounty(val) {
      margin-left: 100px;
   }
 }
-.el-input {
-  width: 300px;
-}
 
 .upload-img {
   margin-left: -70px;
   font-weight: bold;
 }
-/deep/.el-input__inner {
-     width:300px;
-     height:40px;
-   }
-/deep/.el-textarea__inner {
-    width:300px;
-}
+
 .addressSeveral {
   width: 40%;
-  // margin-left: 100px;
+
   background-color: gainsboro;
   p {
     line-height: 50px;
@@ -432,12 +421,9 @@ handleSelectCounty(val) {
     color: #fff;
   }
 }
-.select {
-  width: 150px;
-}
 
 .footerBtn {
-  margin-left:150px;
+  margin-left:120px;
 }
 .set {
    color: red;
@@ -450,9 +436,7 @@ handleSelectCounty(val) {
 .remark {
   margin-top: -20px;
  }
-.threeLevel {
-  width: 400PX;
-}
+
 
 </style>
 

@@ -6,9 +6,9 @@ import qs from 'qs'
 
 // 创建一个axios实例
 const service = axios.create({
-  // baseURL: "api/",   //api 的 base_url
+  // baseURL: "http://47.112.195.117:8089",   
   withCredentials: true, // 跨域请求时发送 cookies
-  timeout: 5000, // 请求超时
+  timeout: 10000, // 请求超时
   // processData : false,
   headers: {
 

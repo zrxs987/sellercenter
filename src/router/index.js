@@ -103,6 +103,12 @@ export const constantRoutes = [
         component: () => import('@/views/openShop/shopSucceed'),
         meta: { title: '开店成功',},
       },
+      {
+        path: 'ShopFrontPage',
+        name: 'ShopFrontPage',
+        component: () => import('@/views/openShop/ShopFrontPage'),
+        meta: { title: '店铺首页',},
+      },
     ]
   },
 

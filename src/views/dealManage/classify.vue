@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-row >
             <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
-               <el-col :span="6"  >
+               <el-col :span="6">
                  <span>成交时间：</span>
                     <el-date-picker
                         style="width: 60%;"
@@ -74,10 +74,10 @@
             <el-table-column prop="goodsName" align="center" label="商品名称" width="260"></el-table-column>
             <el-table-column prop="goodsAmount" align="center" label="金额"  width="110"></el-table-column>
             <el-table-column prop="orderState" align="center" label="订单状态" ></el-table-column>
-            <el-table-column prop="alipay" align="center" label="支付状态"></el-table-column>
-            <el-table-column prop="deliverGoods" align="center" label="发货状态"></el-table-column>
+            <!-- <el-table-column prop="alipay" align="center" label="支付状态"></el-table-column>
+            <el-table-column prop="deliverGoods" align="center" label="发货状态"></el-table-column> -->
             <el-table-column prop="paymentCode" align="center" label="支付方式"></el-table-column>
-            <el-table-column prop="distribution" align="center" label="配送方式" ></el-table-column>
+            <!-- <el-table-column prop="distribution" align="center" label="配送方式" ></el-table-column> -->
             <el-table-column prop="finnshedTime" align="center" label="成交时间"></el-table-column>
             <el-table-column prop="address" align="center" label="操作">
                   <template slot-scope="scope">
@@ -93,9 +93,9 @@
 
 <script>
 import pagination from '@/components/Pagination'
-import {getEvaluate,getRecentlyTrimester} from '@/api/classify'
+import {getEvaluate,getRecentlyTrimester,getBusinessState} from '@/api/classify'
 import {getReturnManagementList} from '@/api/returnManagement'
-// import {getMerchantOrder} from '@/api/returnManagement'
+import {getMerchantOrder} from "@/api/level3Linkage.js"
 
 export default {
   // name: 'classify',
@@ -237,19 +237,88 @@ export default {
   //待付款订单
   handleObligation() {
     this.shows = 2;
-    this.tableData = [];
+     this.loading = true;
+      getBusinessState({ storeId: 3, orderState: 10 })
+        .then(res => {
+           if (res.code === "200") {
+            this.loading = false;
+             res.data = res.data.map( item => {
+              return {
+                ...item,
+                goodsName: item.orderGoodsList.length == 0 ? '' : item.orderGoodsList[0].goodsName
+                
+              }
+            })
+            this.tableData = res.data;
+          } else {
+            this.$message({
+              message: res.errorMsg,
+              type: "error",
+              duration: 5 * 1000
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+    });
   },
 
   //待发货订单
-  handleSendGoods () {
+  handleSendGoods() {
     this.shows = 3;
-    this.tableData = [];
+     this.loading = true;
+      getMerchantOrder({ storeId: 3, orderState: 20 })
+        .then(res => {
+           if (res.code === "200") {
+            this.loading = false;
+             res.data = res.data.map( item => {
+              return {
+                ...item,
+                goodsName: item.orderGoodsList.length == 0 ? '' : item.orderGoodsList[0].goodsName
+                
+              }
+            })
+            this.tableData = res.data;
+          } else {
+            this.$message({
+              message: res.errorMsg,
+              type: "error",
+              duration: 5 * 1000
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+    });
   },
 
   //已发货订单
   handleAlready () {
     this.shows = 4;
-    this.tableData = [];
+        this.loading = true;
+      getBusinessState({ storeId: 3, orderState: 30 })
+        .then(res => {
+           if (res.code === "200") {
+            this.loading = false;
+             res.data = res.data.map( item => {
+              return {
+                ...item,
+                goodsName: item.orderGoodsList.length == 0 ? '' : item.orderGoodsList[0].goodsName
+                
+              }
+            })
+            this.tableData = res.data;
+          } else {
+            this.$message({
+              message: res.errorMsg,
+              type: "error",
+              duration: 5 * 1000
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+    });
   },
 
   //退款中订单
@@ -257,17 +326,17 @@ export default {
       this.shows = 5;
       this.loading = true;
       getReturnManagementList({ storeId:3, orderGoodsRefundStatus: 2 })
-      .then(res => {
-          if (res.code === "200") {
-          this.loading = false;
-          res.data = res.data.map(item =>{
-            return {
-                ...item,
-                addTime: item.orders.addTime,
-                goodsAmount: item.orders.goodsAmount,
-                orderSn: item.orders.orderSn,
-            }
-          })
+        .then(res => {
+            if (res.code === "200") {
+            this.loading = false;
+            res.data = res.data.map(item =>{
+              return {
+                  ...item,
+                  addTime: item.orders.addTime,
+                  goodsAmount: item.orders.goodsAmount,
+                  orderSn: item.orders.orderSn,
+              }
+            })
           this.tableData = res.data;
         } else {
           this.$message({
@@ -297,7 +366,6 @@ export default {
                 goodsAmount: item.orders.goodsAmount,
                 orderSn: item.orders.orderSn,
             }
-            console.log(addTime,'addTime')
           })
           this.tableData = res.data;
         } else {
@@ -340,14 +408,60 @@ export default {
 
     //完成订单
     handleAccomplish () {
-       this.shows = 8;
-       this.tableData = [];
+      this.shows = 8;
+      this.loading = true;
+      getBusinessState({ storeId: 3, orderState: 40 })
+        .then(res => {
+           if (res.code === "200") {
+            this.loading = false;
+             res.data = res.data.map( item => {
+              return {
+                ...item,
+                goodsName: item.orderGoodsList.length == 0 ? '' : item.orderGoodsList[0].goodsName
+                
+              }
+            })
+            this.tableData = res.data;
+          } else {
+            this.$message({
+              message: res.errorMsg,
+              type: "error",
+              duration: 5 * 1000
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+    });
     },
 
     //关闭订单
     handleClose () {
        this.shows = 9;
-       this.tableData = [];
+       this.loading = true;
+      getBusinessState({ storeId: 3, orderState: 0 })
+        .then(res => {
+           if (res.code === "200") {
+            this.loading = false;
+             res.data = res.data.map( item => {
+              return {
+                ...item,
+                goodsName: item.orderGoodsList.length == 0 ? '' : item.orderGoodsList[0].goodsName
+                
+              }
+            })
+            this.tableData = res.data;
+          } else {
+            this.$message({
+              message: res.errorMsg,
+              type: "error",
+              duration: 5 * 1000
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+    });
     },
   },
 

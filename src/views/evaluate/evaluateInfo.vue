@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="table-box">
+      <!-- <span></span> -->
       <table style="border-collapse:collapse;">
         <tr class="table-header">
           <td></td>
@@ -15,7 +16,7 @@
             <img src="../../styles/img/red.png" alt>
             <span class="flower">好评</span>
           </td>
-          <td>0</td>
+          <td>{{}}</td>
           <td>0</td>
           <td>10</td>
           <td>91</td>
@@ -150,6 +151,7 @@ export default {
   data() {
     return {
       evaluate: {},
+      // element:[],
       activeName:'second',
     };
   },
@@ -162,22 +164,30 @@ export default {
  methods:{
       fetchData(){
          getStatistics({gevalStoreid:3}).then((res)=>{
-              
+
               this.evaluate = res.data
-              console.log(this.evaluate,788)
+              let a = this.evaluate
+ 
+              for (const key in a) {
+                  if (a.hasOwnProperty(key)) {
+                     const element = a[key];
+                     console.log(element,'element778') 
+                } 
+             }
          })
       },
 
      _getEvaluateInfo(){
            
         getEvaluateInfo({gevalStoreid:15}).then((res)=>{
-          //  console.log(res,11111111)
+              // console.log(res,11111111)
         }) 
      },
+
      //tab切换
      handleClick(tab, event) {
         // console.log(tab, event);
-      }
+    }
   },
 };
 </script>
@@ -185,7 +195,7 @@ export default {
 <style lang="scss" scoped>
 .table-box {
   width: 60%;
-  margin: 100px 100px;
+  margin: 50px 100px;
   border-collapse: collapse;
   text-align: center;
   tr {

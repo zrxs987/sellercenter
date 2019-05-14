@@ -94,17 +94,20 @@ export default {
               storeName: this.formProduct.headlines,
               memberName: this.formProduct.price,
               sellerName: this.formProduct.integral,
-              memberId: this.$store.state.user.sellerId 
+              memberId: this.$store.state.user.memberId
             }
             getaddShopsInfo(obj).then((res)=>{
                 if(res.code === '200'){
-                      this.storeId()
+                     this.storeId()
+                     this.$router.push({
+                        path:'./ShopFrontPage'
+                  }); 
                       this.$message({
                     message: res.errorMsg,
                     type: 'success',
                     duration: 5 * 1000
                   })
-                  
+            
                 }else{
               this.$message({
                 message: res.errorMsg,
@@ -126,8 +129,10 @@ export default {
 
     //获取storeId
     storeId() {
-        getStoreId().then((res)=>{
-        console.log(res,'res')
+        getStoreId({memberId:this.$store.state.user.memberId}).then((res)=>{
+
+          this.$store.state.user.storeId = res.data
+
       })
     },
 

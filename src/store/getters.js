@@ -5,6 +5,7 @@ const getters = {
   device: state => state.app.device,
   token: state => state.user.token,
   sellerId: state=> state.user.sellerId,
-  sellerName: state=> state.user.sellerName
+  sellerName: state=> state.user.sellerName,
+  memberId: state=> state.user.memberId,
 }
 export default getters

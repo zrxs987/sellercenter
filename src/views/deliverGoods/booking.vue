@@ -5,7 +5,7 @@
           <!-- <el-col :span="24" > -->
             <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
        
-             <el-col :span="12">
+             <el-col :span="11">
                  <span>收件地址：</span>
                  <span class="default">{{location}}&nbsp;&nbsp;&nbsp;</span>
                  <!-- <span class="default">张小姐&nbsp;&nbsp;</span>
@@ -14,7 +14,7 @@
                  <span class="location">新增地址&nbsp;&nbsp;</span>
             </el-col>
 
-             <el-col :span="3">
+             <el-col :span="4">
                  <span>快递公司：</span>
                  <span class="default">{{expressage}}</span>
             </el-col>
@@ -171,7 +171,7 @@ export default {
 </script>
 
 
-<style>
+<style lang="scss" scoped>
 .default {
     color: gray;
 }
@@ -179,5 +179,10 @@ export default {
 .location {
     color: #FF6464;
     cursor: pointer;
+}
+/deep/.el-row {
+  padding-left: 10px !important;
+  padding-bottom: 10px !important;
+  line-height: 46px;
 }
 </style>

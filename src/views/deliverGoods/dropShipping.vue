@@ -3,6 +3,7 @@
     <div class="filter-container">
       <el-row>
         <el-form :inline="true" class="headerForm" style="margin-bottom: 1.5%;">
+          <el-col :span="5">
           <el-form-item label="快递公司" :label-width="formLabelWidth">
             <el-select
               size="medium"
@@ -18,8 +19,9 @@
               ></el-option>
             </el-select>
           </el-form-item>
-
-          <el-form-item label="退货地址" :label-width="formLabelWidth">
+         </el-col>
+         <el-col :span="11">
+          <el-form-item label="发货地址" :label-width="formLabelWidth">
             <el-select
               size="small"
               placeholder="请选择省"
@@ -66,6 +68,8 @@
               ></el-option>
             </el-select>
           </el-form-item>
+          </el-col>
+           <el-col :span="5">
           <el-form-item label="具体地址">
             <el-input
               type="textarea"
@@ -76,6 +80,7 @@
               v-model="systemInformation.site"
             ></el-input>
           </el-form-item>
+         </el-col>
           <el-button type="primary" @click="handleInquire">添加</el-button>
           <el-button type="primary" @click="handleReset">重置</el-button>
         </el-form>

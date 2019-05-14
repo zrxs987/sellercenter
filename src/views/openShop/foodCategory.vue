@@ -58,15 +58,17 @@ export default {
     bankImgonSuccess( key ) {
 
        this.uploadArr.push( key )
-      
     },
 
     //提交按钮
     handleSubmit() {
 
+      this.storeInformation = window.sessionStorage.getItem('storeInformation')
+
       let obj = {
           scId:this.$route.query.scId,
-          foodProductionLicense:JSON.stringify(this.uploadArr),
+          str:JSON.stringify(this.uploadArr),
+          storeJoinin1Id:this.storeInformation,
       }
  
       getAptitude(obj).then((res)=>{

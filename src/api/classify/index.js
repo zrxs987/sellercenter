@@ -22,3 +22,13 @@ export function getRecentlyTrimester(data) {
 }
 
 
+//商家状态订单
+export function getBusinessState(data) {
+  return request({
+    url: '/xmall-front-web/orders/ordersState',
+    method: 'post',
+    params: data
+  })
+}
+
+

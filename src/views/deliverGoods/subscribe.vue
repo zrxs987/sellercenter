@@ -101,7 +101,7 @@ export default {
       listLoading: true,
       multipleSelection: [],
       downloadLoading: false,
-      tableData:[ ],
+      tableData:[],
       //分页
       listQuery: {
         page: 1,
@@ -194,6 +194,7 @@ export default {
 <style lang="scss" scoped>
  .examine {
    color: #FF6464;
+   cursor: pointer;
  }
  //弹框
   .remark {

@@ -16,6 +16,7 @@ module.exports = {
    * 在大多数情况下请使用 '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
+  // http://47.112.195.117/xmall-manager-web/src/main/webapp/static/admin/  http://47.112.195.117:8089//admin/ 
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',

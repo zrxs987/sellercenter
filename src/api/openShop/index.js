@@ -25,7 +25,7 @@ export function getProductType(data) {
  //提交资质
 export function getAptitude(data) {
   return request({
-    url: '/xmall-front-web/manufacturerQualification/add',
+    url: '/xmall-front-web/manufacturerQualification/add1',
     method: 'post',
     data:(data)
   })
@@ -72,6 +72,6 @@ export function getStoreId(data) {
       url: '/xmall-front-web/store/selectByMemberId',
       method: 'post',
       data:(data)
-    })
-  }
+   })
+ }
   

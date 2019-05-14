@@ -8,6 +8,8 @@ const state = {
   token: getToken(),
   sellerId:'',
   sellerName:'',
+  memberId:'',
+  storeId:'',
 }
 
 const mutations = {
@@ -26,7 +28,15 @@ const mutations = {
   SET_SELLERNAME: (state, sellerName) => {
     state.sellerName = sellerName
   },
+  SET_MEMBERID: (state, memberId) => {
+    state.memberId = memberId
+  },
+  SET_STOREID: (state, storeId) => {
+    state.storeId = storeId
+  },
 }
+
+
 
 const actions = {
 //用户登录
@@ -38,12 +48,12 @@ const actions = {
       }
       login({...obj}).then(response => {
         
-        
         const data = response.data
 
         commit('SET_TOKEN', data.token)
         commit('SET_SHOPID', data.sellerId)
         commit('SET_SELLERNAME', data.sellerName)
+        commit('SET_MEMBERID', data.memberId)
 
         setToken(data.token)
         resolve()
@@ -52,6 +62,7 @@ const actions = {
       })
     })
   },
+
 
 
   //获取用户信息
