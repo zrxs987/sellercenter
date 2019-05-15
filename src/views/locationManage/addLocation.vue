@@ -400,7 +400,7 @@ handleSelectCounty(val) {
 <style lang="scss" scoped>
 .personalData {
   padding-bottom: 30px;
-  margin-top: 50px;
+  margin-top: 20px;
   .el-form {
      margin-left: 100px;
   }

@@ -3,23 +3,9 @@
     <div class="issue">
         <!-- form提交表单 -->
         <el-form :model="issue" :rules="applyRule" ref="issue" label-width="80px">
-           <el-form-item label="店家名称" prop="shopName">
-                <el-input class="shopInput" placeholder="请输入店家名" v-model="issue.shopName" clearable style="width:360px;"></el-input>
-           </el-form-item> 
         <el-form-item label="商品名称" prop="goodsName">
           <el-input  v-model="issue.goodsName" placeholder="请输入商品名称" style="width:360px;" clearable ></el-input>
         </el-form-item >
-
-          <el-form-item label="选择分类" > 
-              <el-cascader
-              style="width:360px;"
-              placeholder="请选择商品类目"
-              :options="options"
-              clearable 
-              @active-item-change="handleChange"
-              :props="prop"
-            ></el-cascader>
-          </el-form-item>
 
          <el-form-item label="商品品牌" prop="brand">
             <el-select
@@ -27,19 +13,59 @@
               placeholder="请选择商品品牌"
               v-model="issue.brand"
               style="width:360px;"
-               @change="handleBrand"
+              @change="handleBrand"
               clearable
             >
               <el-option
                 v-for="(item, value) in optionList.brand"
                 :key="value"
                 :value="value"
-                :label="item.brandClass"
+                :label="item.brandName"
               ></el-option>
             </el-select>
           </el-form-item>
-          
-          <el-form-item label="退货地址" >
+
+          <el-form-item label="选择分类" > 
+            <el-cascader
+              style="width:360px;"
+              placeholder="请选择商品类目"
+              :props="prop"
+              :options="classifyOptions"
+              change-on-select
+              @change="handItemChange"
+              v-model="orderPara"
+              clearable
+            ></el-cascader>
+          </el-form-item>
+
+          <el-form-item
+            v-for="(domain, index) in issue.domains"
+            :label="'尺寸' + index"
+            :key="domain.index"
+            :prop="'domains.' + index + '.size'"
+          >
+            <el-input v-model="domain.size" placeholder="请输入商品尺寸" style="width:360px;" clearable>
+            </el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="addDomain">新增尺寸</el-button>
+          </el-form-item>
+
+
+          <el-form-item
+            v-for="(Colour, index) in issue.Colour"
+            :label="'颜色' + index"
+            :key="Colour.index"
+            :prop="'Colour.' + index + '.kind'"
+          >
+            <el-input v-model="Colour.kind" placeholder="请输入商品颜色" style="width:360px;" clearable>
+            </el-input><el-button @click.prevent="removeColour(Colour)">删除</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="addColour">新增颜色</el-button>
+          </el-form-item>
+  
+          <el-form-item label="选择产地" >
             <el-select
               size="small"
               style="width:118px;"
@@ -87,31 +113,24 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="出厂价" prop="userName">
-            <el-input class="shopInput" placeholder="请输入出厂价" v-model="issue.userName" clearable style="width:360px;"></el-input>
+          <el-form-item label="出厂价" prop="factoryPrice">
+            <el-input class="shopInput" placeholder="请输入出厂价" v-model="issue.factoryPrice" clearable style="width:360px;"></el-input>
           </el-form-item>
-          <el-form-item label="批发价" prop="phoneNumber">
-            <el-input class="shopInput" placeholder="请输入批发价" v-model="issue.phoneNumber" clearable style="width:360px;"></el-input>
+          <el-form-item label="批发价" prop="tradePrice">
+            <el-input class="shopInput" placeholder="请输入批发价" v-model="issue.tradePrice" clearable style="width:360px;"></el-input>
           </el-form-item>
-          <el-form-item label="零售价" prop="WechatID">
-            <el-input class="shopInput" placeholder="请输入零售价" v-model="issue.WechatID" clearable style="width:360px;"></el-input>
-          </el-form-item>
-          <el-form-item label="商品积分" prop="integral">
-            <el-input class="shopInput" placeholder="请输入商品积分" v-model="issue.integral" clearable style="width:360px;"></el-input>
+          <el-form-item label="零售价" prop="retailPrice">
+            <el-input class="shopInput" placeholder="请输入零售价" v-model="issue.retailPrice" clearable style="width:360px;"></el-input>
           </el-form-item>
             <el-form-item label="商品描述" prop="categoryInfo">
                <el-input type="textarea" placeholder="请输入商品描述" class="site" v-model="issue.categoryInfo" size="medium" :rows="5" resize="none"></el-input>
            </el-form-item> 
-          <div class="upload-box clearfix">
-            <el-form-item label>
-              <span class="upload-img">上传商品主图</span>
+            <el-form-item label='上传商品主图' label-width="100px">
               <upload :show="false" @on-Success="masterMapImgonSuccess"/>
             </el-form-item>
-            <el-form-item label class="upload">
-              <span class="upload-img">上传图文详情</span>
+            <!-- <el-form-item label='上传图文详情' label-width="100px" class="upload">
               <upload :show="false" @on-Success="textImgonSuccess"/>
-            </el-form-item>
-          </div>
+            </el-form-item> -->
           <div class="buttonBtn">
             <el-button type="primary" @click="handleCancel()">重置</el-button>
             <el-button type="primary" @click="handleSubmit()">提交</el-button>
@@ -127,6 +146,7 @@ import progressBar from "@/components/publicMethod/progressBar";
 
 import { getClassify,getClassifyCut,getTrademark,getIssue ,getAdventure} from "@/api/commodity";
 import { getAddressInfo,getCity } from "@/api/level3Linkage.js";
+import { log } from 'util';
 
 export default {
   name:'issueCommodity',
@@ -136,6 +156,7 @@ export default {
   },
   data() {
     return {
+      dialogFormVisible:false,
       //发布商品定义
       issue: {
         expressage: '',
@@ -144,17 +165,15 @@ export default {
         district: '',
         brand:'',
         goodsName:'',
-        shopName:'',
-        // selectedOptions:'',
+        domains: [ {size:''}],
+        Colour: [ {kind:''}],
       },
       //下拉数据
       optionList: {
-        expressage: [],
-        provinceList: [],
-        cityList: [],
-        districtList: [],
-        brand:[],
+
       },
+      classifyOptions:[],
+      orderPara:[],
       options:[],
       prop:{
           value:'gcId',
@@ -163,18 +182,21 @@ export default {
       },
       //发布商品规则
       applyRule: {
-        userName: [
-            { required: true, message: "请输入姓名", trigger: "blur" },
-            { min: 2, max: 4, message: "长度在 2 到 4 个字符", trigger: "blur" }
-          ],
-        phoneNumber: [
-               {
+        factoryPrice: [
+             {
                 required: true,
-                message: '请输入正确的手机号',
-                trigger: 'blur',
-              }
+                message: "带*号不能为空",
+                trigger: "blur"
+             }
+          ],
+        tradePrice: [
+             {
+                required: true,
+                message: "带*号不能为空",
+                trigger: "blur"
+            }
          ],
-        WechatID: [
+        retailPrice: [
             {
             required: true,
             message: "带*号不能为空",
@@ -202,13 +224,6 @@ export default {
             trigger: "blur"
            }
         ],
-        categoryInfo: [
-            {
-            required: true,
-            message: "带*号不能为空",
-            trigger: "blur"
-           }
-        ],
         shopName: [
             {
             required: true,
@@ -223,7 +238,7 @@ export default {
             trigger: "blur"
            }
         ],
-        integral: [
+        orderPara: [
             {
             required: true,
             message: "带*号不能为空",
@@ -234,36 +249,35 @@ export default {
     };
   },
   created() {
-    // this.handleChange()
     this.handleCall()
     this.handleBrand()
     this.firstData()
   },
   methods: {
-    bankImgonSuccess() {
-
-    },
 
     // 提交
     handleSubmit() {
       this.$refs.issue.validate(res => {
         if (res) {
-
+            
             let obj = {
               goodsName:this.issue.goodsName,
-              storeName:this.issue.shopName,
-              goodsPrice:this.issue.userName,
-              goodsPromotionPrice:this.issue.phoneNumber,
-              goodsMarketprice:this.issue.WechatID,
+              goodsPrice:this.issue.factoryPrice,
+              goodsPromotionPrice:this.issue.tradePrice,
+              goodsMarketprice:this.issue.retailPrice,
               goodsImage:this.masterMap,
-              goodsJingle:this.textImg,
+              // goodsJingle:this.textImg,
               goodsBody:this.issue.categoryInfo,
               brandId:this.issue.brand,
               areaid1:this.issue.province,
               areaid2:this.issue.city,
               areaid3:this.issue.district,
               storeId:this.$store.state.user.storeId,
-              score:this.issue.integral
+              gcId1: this.orderPara[0],
+              gcId2: this.orderPara[1],
+              gcId3: this.orderPara[2],
+              gcId:this.orderPara[0],
+              abc:JSON.stringify(this.issue.domains),
             }
              getIssue( obj ).then((res)=>{
                   if(res.code === '200'){
@@ -290,13 +304,23 @@ export default {
     },
 
    //图文详情
-    textImgonSuccess( key ) {
-       this.textImg = key
-    },
+    // textImgonSuccess( key ) {
+    //    this.textImg = key
+    // },
 
-    //点击取消
+    //点击重置
     handleCancel() {
-      this.issue = {}
+      this.issue.goodsName = '',
+      this.issue.factoryPrice = '',
+      this.issue.tradePrice = '',
+      this.issue.retailPrice = '',
+      this.issue.categoryInfo = '',
+      this.issue.brand = '',
+      this.issue.province = '',
+      this.issue.city = '',
+      this.issue.district= '',
+      this.masterMap = '',
+      this.orderPara=[],
       this.$refs.issue.resetFields();
     },
 
@@ -336,34 +360,82 @@ export default {
     firstData(){
 
         getClassify().then(res=>{
-          this.options = res.data
-        })
+          // console.log(res);
+          this.options = res.data;
+          this.classifyOptions = res.data;
+            for(let i=0;i<this.classifyOptions.length;i++){
+            if(this.classifyOptions[i].goodsClassPc){
+                    for(let j=0;j<this.classifyOptions[i].goodsClassPc.length;j++){
+                          this.classifyOptions[i].goodsClassPc[j].goodsClassPc = [];
+               }
+            }
+          }
+       })
     },
 
+      handItemChange(e){
+        if(e.length ==2){
+            this.handleChange(e);
+        }
+    },
   //下级分类
     handleChange( val) {
-      //  getClassifyCut({gcParentId:val}).then((res)=>{
-      //    let firstData = this.options
-      //    firstData[val[0]].children = res.data
-      //    this.getClassifyList()
-      //  })
+       getClassifyCut({gcParentId:val[1]}).then((res)=>{
+          for(let i=0;i<this.classifyOptions.length;i++){
+            if(this.classifyOptions[i].goodsClassPc){
+                    for(let j=0;j<this.classifyOptions[i].goodsClassPc.length;j++){
+                      if(this.classifyOptions[i].gcId ==val[0] && this.classifyOptions[i].goodsClassPc[j].gcId ==val[1] ){
+                           this.classifyOptions[i].goodsClassPc[j].goodsClassPc = res.data;
+                            //  console.log(this.classifyOptions);
+                  }
+               }
+            }
+          }
+       })
     },
 
-    // getClassifyList(gcParentId) {
-    //    getClassifyCut({gcParentId}).then((res)=>{
-    //      let firstData = this.options
-    //      firstData[val[0]].children = res.data
-    //       console.log(firstData)
-    //    })
-    // },
 
-    //商品品牌
-    handleBrand(){     
-      getTrademark().then((res)=>{
-          this.optionList.brand = res.data
-      })
-    },
-  }
+//商品品牌
+  handleBrand(){     
+    getTrademark().then((res)=>{
+      // console.log(res.data,'res.data')
+        this.optionList.brand = res.data
+    })
+  },
+
+  //删除尺寸
+  removeDomain(item) {
+    var index = this.issue.domains.indexOf(item)
+    if (index !== -1) {
+      this.issue.domains.splice(index, 1)
+    }
+  },
+  //新增尺寸
+  addDomain() {
+    this.issue.domains.push({
+      size: '',
+      key: Date.now()
+    });
+  },
+
+  //删除颜色
+  removeColour(item) {
+    var index = this.issue.Colour.indexOf(item)
+    if (index !== -1) {
+      this.issue.Colour.splice(index, 1)
+    }
+  },
+
+  //新增尺寸
+  addColour() {
+    this.issue.Colour.push({
+      size: '',
+      key: Date.now()
+    });
+  },
+
+
+}
 };
 
 </script>
@@ -372,15 +444,10 @@ export default {
 <style lang="scss"  scoped>
 .issue {
   width: 800px;
-  margin: 50px auto;
+  margin: 30px auto;
 }
 .el-form {
   margin-left: 50px;
-}
-
-.upload-img {
-  margin-left: -60px;
-  line-height: 40px;
 }
 
 .buttonBtn {

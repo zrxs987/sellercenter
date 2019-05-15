@@ -67,7 +67,12 @@
                      <p class="turnover" style=" font-size:16px;">
                          <span>￥1500.02</span>
                          <span>￥1500.03</span>
-                         <span>日账单>></span>
+                         <span style="cursor: pointer;">日账单>></span>
+                     </p>
+                     <p class="turnover" style=" font-size:16px;">
+                         <span style="margin-left: 5%;">待结算</span>
+                         <span style="margin-left: 5%;">已结算</span>
+                         <span style="margin-left: 0%;cursor: pointer;">月账单>></span>
                      </p>
                  </div>
              </div>

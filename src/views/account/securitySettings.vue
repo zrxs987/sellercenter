@@ -19,8 +19,72 @@
             
            <span class="transverse"></span>
 
-           <div class="serve" style=" margin-top:50px;">
+           <div class="serve" >
                 <h3>您的安全服务</h3>
+                <div class="securityService">
+                    <!-- <i style="font-size: 18px" class="iconfont icon-duigou"></i>  -->
+                   <span class="already">
+                       已完成
+                   </span>
+                   <h4 class="attestation">
+                       身份认证
+                   </h4>
+                   <span class="character" >
+                      用于提升账号的安全性和信任级别，认证后的有卖家记录的账号不能修改认证信息。
+                   </span>
+                   <span class="examine">
+                       查看
+                   </span>
+                </div>
+
+                <span class="transverse"></span>
+
+                <div class="securityService">
+                   <span class="already">
+                       已设置
+                   </span>
+                   <h4 class="attestation">
+                       登录密码
+                   </h4>
+                   <span class="character" >
+                      安全性高的密码可以使账号更安全，建议您定期更换密码，切设置一个包含数字和字母，并长度超过6位的密码
+                   </span>
+                   <span class="examine">
+                       查看
+                   </span>
+                </div>
+                <span class="transverse"></span>
+                <div class="securityService">
+                   <span class="already">
+                       未设置
+                   </span>
+                   <h4 class="attestation">
+                       密保问题
+                   </h4>
+                   <span class="character" >
+                      是您找回密码的方式之一，建议您设置一个容易记住，切最不容易让人获取的问题及答案，更有效保障您密码的安全。
+                   </span>
+                   <span class="examine">
+                       查看
+                   </span>
+                </div>
+                <span class="transverse"></span>
+                <div class="securityService">
+                   <span class="already">
+                       已绑定
+                   </span>
+                   <h4 class="attestation">
+                       绑定手机
+                   </h4>
+                   <span class="character" >
+                      绑定手机后，您即可享受云端丰富的手机服务，如手机找回密码等。
+                   </span>
+                   <span class="examine">
+                       查看 
+                   </span>
+                   
+                </div>
+                <span class="transverse"></span>
            </div>
        </div>
     </div>
@@ -46,9 +110,43 @@ export default {
   }
 
   .basis {
-      margin-left: 20px;
+      margin-left: 80px;
       span {
           line-height: 40px;
       }
   }
+
+.serve {
+    overflow: hidden;
+  .securityService {
+      width: 50%;
+      height: 100px;
+      display:flex;
+      justify-content:center;
+      
+  }
+
+  .already {
+      line-height: 100px;
+      margin-left: 20px;
+
+  }
+  .attestation {
+    margin-left: 30px;
+    display: inline;
+    line-height: 50px;
+  }
+  .character {
+      display: inline-block;
+      width: 55%;
+      margin-left: 30px;
+      padding-top: 30px;
+  }
+  .examine {
+      color: red;
+      cursor: pointer;
+      margin-left: 20px;
+      margin-top: 30px;
+  }
+}
 </style>

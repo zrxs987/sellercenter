@@ -11,7 +11,7 @@
         </el-form-item>
       </div>
       <div class="buttonBtn">
-        <el-button type="primary" @click="handleCancel()">取消</el-button>
+        <!-- <el-button type="primary" @click="handleCancel()">取消</el-button> -->
         <el-button type="primary" @click="handleSubmit()">提交</el-button>
       </div>
     </el-form>
@@ -40,9 +40,9 @@ export default {
   },
   methods: {
     //取消
-    handleCancel() {
+    // handleCancel() {
 
-    },
+    // },
     //上传盖章后的合同
     contractImgonSuccess( key ) {
        this.uploading.contract = key
@@ -50,7 +50,12 @@ export default {
     
     //提交
     handleSubmit() {
-       
+    
+      if (!this.uploading.contract) {
+            this.$message.warning("请先上传盖章后的合同");
+            return;
+        }
+
        let obj = {
          contract:this.uploading.contract,
        }
@@ -59,7 +64,7 @@ export default {
         if(res.code === '200'){
              setTimeout(() => {
                this.$router.push({path:'./shopSucceed'}); 
-        }, 2000)
+        }, 1000)
         }else{
                this.$message({
                 message: res.errorMsg,
@@ -87,7 +92,7 @@ export default {
 }
 
 .buttonBtn {
-  margin-left: 60px;
+  margin-left: 100px;
 }
 .upload-img {
   margin-left: -60px;

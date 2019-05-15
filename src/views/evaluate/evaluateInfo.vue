@@ -11,20 +11,20 @@
           <td>六个月前</td>
           <td>总计</td>
         </tr>
-        <tr>
+        <tr v-for="(item,keyIndex) in tableDate" :key="keyIndex">
           <td>
-            <img src="../../styles/img/red.png" alt>
-            <span class="flower">好评</span>
+            <img :src="'../../styles/img/'+item.src+'.png'"  alt v-if="item.src" >
+            <span class="flower">{{item.text}}</span>
           </td>
-          <td>{{}}</td>
-          <td>0</td>
-          <td>10</td>
-          <td>91</td>
-          <td style="color: #409eff;">101</td>
+          <td>{{item.week}}</td>
+          <td>{{item.mouth}}</td>
+          <td>{{item.mouth6Front}}</td>
+          <td>{{item.mouth6Lately}}</td>
+          <td style="color: #409eff;">{{item.all}}</td>
         </tr>
-        <tr>
+        <!-- <tr>
           <td>
-            <img src="../../styles/img/yellow.png" alt>
+        
             <span class="flower">中评</span>
           </td>
           <td>0</td>
@@ -51,7 +51,7 @@
           <td style="color: #409eff;">0</td>
           <td style="color: #409eff;">0</td>
           <td style="color: #409eff;">101</td>
-        </tr>
+        </tr> -->
       </table>
     </div>
   <el-tabs v-model="activeName"  @tab-click="handleClick">
@@ -152,6 +152,7 @@ export default {
     return {
       evaluate: {},
       // element:[],
+      tableDate:[],
       activeName:'second',
     };
   },
@@ -164,16 +165,25 @@ export default {
  methods:{
       fetchData(){
          getStatistics({gevalStoreid:3}).then((res)=>{
+    this.tableDate.push( {'all':res.data.all[1],'week':res.data.day7[1],'mouth':res.data.mouth1[1], 'mouth6Front':res.data.mouth6Front[1],'mouth6Lately':res.data.mouth6Lately[1],'text':'好评','src':"red"})
+    this.tableDate.push( {'all':res.data.all[3],'week':res.data.day7[3],'mouth':res.data.mouth1[3], 'mouth6Front':res.data.mouth6Front[3],'mouth6Lately':res.data.mouth6Lately[3],'text':'中评','src':"yellow"})
+    this.tableDate.push( {'all':res.data.all[5],'week':res.data.day7[5],'mouth':res.data.mouth1[5], 'mouth6Front':res.data.mouth6Front[5],'mouth6Lately':res.data.mouth6Lately[5],'text':'差评','src':"gray"})
+  
+    let all =null;
+    let week = null;
+    let mouth = null;
+    let mouth6Front = null;
+    let mouth6Lately = null;
+    for(let i=0;i<this.tableDate.length;i++){
+        all += Number(this.tableDate[i].all);
+        week += Number(this.tableDate[i].week);
+        mouth += Number(this.tableDate[i].mouth);
+        mouth6Front += Number(this.tableDate[i].mouth6Front);
+        mouth6Lately += Number(this.tableDate[i].mouth6Lately);
+    }
+  this.tableDate.push( {'all':all,'week':week,'mouth':mouth, 'mouth6Front':mouth6Front,'mouth6Lately':mouth6Lately,'text':'总计'})
+    console.log( this.tableDate);
 
-              this.evaluate = res.data
-              let a = this.evaluate
- 
-              for (const key in a) {
-                  if (a.hasOwnProperty(key)) {
-                     const element = a[key];
-                     console.log(element,'element778') 
-                } 
-             }
          })
       },
 
@@ -211,6 +221,9 @@ export default {
     line-height: 50px;
   }
   img {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
     margin-right: 8px;
     margin-bottom: -5px;
   }

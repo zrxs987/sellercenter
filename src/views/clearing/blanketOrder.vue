@@ -10,7 +10,7 @@
                     style="width: 60%;"
                         v-model="quantumTime"
                         type="daterange"
-                         value-format="yyyy-MM-dd HH:mm"
+                        value-format="yyyy-MM-dd HH:mm"
                         @change="changeStartTime"
                         range-separator=""
                         start-placeholder="开始日期"

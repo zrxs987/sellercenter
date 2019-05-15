@@ -27,7 +27,7 @@
               placeholder="请选择省"
               v-model="systemInformation.province"
               @change="handleSelectProvince"
-              style="width:30%;"
+              style="width:25%;"
               clearable
             >
               <el-option
@@ -43,7 +43,7 @@
               placeholder="请选择市"
               v-model="systemInformation.city"
               @change="handleSelectCounty"
-              style="width:30%;"
+              style="width:25%;"
               clearable
             >
               <el-option
@@ -57,7 +57,7 @@
               size="small"
               placeholder="请选择区"
               v-model="systemInformation.district"
-              style="width:30%;"
+              style="width:25%;"
               clearable
             >
               <el-option
@@ -69,7 +69,7 @@
             </el-select>
           </el-form-item>
           </el-col>
-           <el-col :span="5">
+          <el-col :span="5">
           <el-form-item label="具体地址">
             <el-input
               type="textarea"
@@ -81,8 +81,10 @@
             ></el-input>
           </el-form-item>
          </el-col>
+          <div class="btnClick">
           <el-button type="primary" @click="handleInquire">添加</el-button>
           <el-button type="primary" @click="handleReset">重置</el-button>
+          </div>
         </el-form>
       </el-row>
     </div>
@@ -310,7 +312,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped>
 .headerForm {

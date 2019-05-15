@@ -7,27 +7,25 @@
         
         <!-- foem提交表单 -->
         <el-form :model="productType" :rules="productRule" ref="productType" label-width="100px">
-          <el-form-item label="产品类型" prop="radio">
+          <el-form-item label="产品类型" prop="radio" >
             <el-radio-group v-model="productType.radio">
-              <el-radio :label="1">食品类</el-radio>
+              <el-radio :label="1" >食品类</el-radio>
               <el-radio :label="2">化妆品类</el-radio>
               <el-radio :label="3">纸/卫生巾/消毒/洗衣液产品类</el-radio>
               <el-radio :label="4">初级农副产品/家庭手..</el-radio>
-              <el-radio :label="5">初级农副产品类</el-radio>
-              <el-radio :label="6">电器类</el-radio>
-              <el-radio :label="7">儿童玩具类</el-radio>
-              <el-radio :label="8">五金类</el-radio>
-              <el-radio :label="9">酒/水/饮料</el-radio>
-              <el-radio :label="10">服装类</el-radio>
-              <el-radio :label="11">化工产品(危险化学品除外)</el-radio>
-              <el-radio :label="12">生活用品</el-radio>
-              <el-radio :label="13">建筑材料</el-radio>
-              <el-radio :label="14">生产室内照明灯具</el-radio>
-              <el-radio :label="15">板式家具</el-radio>
-              <el-radio :label="16">钟表珠宝首饰</el-radio>
-              <el-radio :label="17">文体用品</el-radio>
-              <el-radio :label="18">电子产品</el-radio>
-              <el-radio :label="19">工艺品</el-radio>
+              <el-radio :label="5">电器类</el-radio>
+              <el-radio :label="6">儿童玩具类</el-radio>
+              <el-radio :label="7">五金类</el-radio>
+              <el-radio style=" margin-left:60px;" :label="8">酒/水/饮料</el-radio>
+              <el-radio style=" margin-left:60px;" :label="9">服装类</el-radio>
+              <el-radio :label="10">化工产品(危险化学品除外)</el-radio>
+              <el-radio :label="11">生活用品</el-radio>
+              <el-radio :label="12">建筑材料</el-radio>
+              <el-radio :label="13">生产室内照明灯具</el-radio>
+              <el-radio :label="14">板式家具</el-radio>
+              <el-radio :label="15">钟表珠宝首饰</el-radio>
+              <el-radio :label="16">文体用品</el-radio>
+              <el-radio :label="17">电子产品</el-radio>
             </el-radio-group>
           </el-form-item>
 
@@ -288,5 +286,6 @@ export default {
 .buttonBtn {
     margin-left: 160px;
 }
+
 
 </style>
