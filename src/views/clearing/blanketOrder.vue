@@ -5,17 +5,20 @@
           <!-- <el-col :span="24" > -->
             <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
                <el-col :span="6"  >
-                 <span>成交时间 ：</span>
-                    <el-date-picker
-                    style="width: 60%;"
-                        v-model="quantumTime"
-                        type="daterange"
-                        value-format="yyyy-MM-dd HH:mm"
-                        @change="changeStartTime"
-                        range-separator=""
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                    </el-date-picker>
+                <span>成交时间 ：</span>
+              <el-date-picker
+               style="width:60%"
+                size="small"
+                v-model="queryData.businessDate"
+                type="daterange"
+                :editable="false"
+                :clearable="false"
+                range-separator=""
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd"
+              ></el-date-picker>
                </el-col>
              <el-col :span="5">
                 <span>收货人 ：</span>
@@ -140,6 +143,7 @@ export default {
         type: undefined,
         sort: '+id'
       },
+      queryData:[],
       //下拉框
       fixOrderListPara:{
           status:'',

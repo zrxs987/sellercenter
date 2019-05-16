@@ -3,15 +3,13 @@
     <!-- 步骤栏 -->
     <progressBar :atPresent="5"/>
     <div class="contract">
-    <el-form label-width="80px" v-model="uploading"  enctype="multipart/form-data">
+    <el-form label-width="80px" v-model="uploading">
       <div class="upload-box clearfix">
-        <el-form-item label>
-          <span class="upload-img">上传盖章后的合同</span>
+        <el-form-item label='上传盖章后的合同' label-width="130px">
           <upload :show="false" @on-Success="contractImgonSuccess"/>
         </el-form-item>
       </div>
       <div class="buttonBtn">
-        <!-- <el-button type="primary" @click="handleCancel()">取消</el-button> -->
         <el-button type="primary" @click="handleSubmit()">提交</el-button>
       </div>
     </el-form>
@@ -36,13 +34,11 @@ export default {
          //盖章的合同
          contract:'',
       },
+      abc:'',
     }
   },
   methods: {
-    //取消
-    // handleCancel() {
 
-    // },
     //上传盖章后的合同
     contractImgonSuccess( key ) {
        this.uploading.contract = key
@@ -73,14 +69,14 @@ export default {
               })
             }
         })
-    },
+     },
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .contract {
-  width: 400px;
+  width: 500px;
   height: 400px;
   margin: 100px auto;
 }
@@ -92,20 +88,11 @@ export default {
 }
 
 .buttonBtn {
-  margin-left: 100px;
+  margin-left: 150px;
 }
-.upload-img {
-  margin-left: -60px;
-  line-height: 50px;
-}
-.upload-box {
-  width: 500px;
-  margin-top: 50px;
-  margin: 0 auto;
-   .el-form-item {
-       width: 210px;
-       height: 150px;
-   } 
+
+.upload-box .el-form-item {
+  width: 300px;
 }
 
 </style>

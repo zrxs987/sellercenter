@@ -216,14 +216,14 @@ export const constantRoutes = [
       path: 'subscribe',
       component: () => import('@/views/deliverGoods/subscribe'),
       name: 'subscribe',
-      meta: { title: '已预约订单' },
+      meta: { title: '已发货订单' },
     },
-    {
-      path: 'booking',
-      component: () => import('@/views/deliverGoods/booking'),
-      name: 'booking',
-      meta: { title: '一键预约' },
-    },
+    // {
+    //   path: 'booking',
+    //   component: () => import('@/views/deliverGoods/booking'),
+    //   name: 'booking',
+    //   meta: { title: '一键预约' },
+    // },
   ]
 },
 
@@ -410,7 +410,7 @@ export const constantRoutes = [
   ]
 },
 
- //个人信息
+ //店铺信息
  {
   path: '/personalDetails',
   component: Layout,

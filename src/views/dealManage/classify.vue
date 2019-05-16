@@ -93,7 +93,7 @@
 
 <script>
 import pagination from '@/components/Pagination'
-import {getEvaluate,getRecentlyTrimester,getBusinessState} from '@/api/classify'
+import {getEvaluate,getRecentlyTrimester,getBusinessState,getDelete} from '@/api/classify'
 import {getReturnManagementList} from '@/api/returnManagement'
 import {getMerchantOrder} from "@/api/level3Linkage.js"
 
@@ -169,6 +169,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.deleteData(row.orderSn)
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -180,6 +181,14 @@ export default {
         });          
       });
   },
+
+//   //删除回调
+deleteData(orderSn){
+  getDelete({orderSn}).then(()=>{
+
+  })
+},
+
     
   // 导出按钮
   handleDownload() {

@@ -82,7 +82,7 @@
           </el-form-item>
          </el-col>
           <div class="btnClick">
-          <el-button type="primary" @click="handleInquire">添加</el-button>
+          <el-button type="primary" @click="handleInquire">发货</el-button>
           <el-button type="primary" @click="handleReset">重置</el-button>
           </div>
         </el-form>

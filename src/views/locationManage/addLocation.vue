@@ -2,8 +2,7 @@
   <div>
     <div class="personalData">
       <el-form ref="personalData" :model="personalData" :rules="personalDataRule"  label-width="100px">
-
-       <el-form-item label="退货地址" :label-width="formLabelWidth" class="threeLevel" prop="">
+         <el-form-item label="退货地址" :label-width="formLabelWidth" class="threeLevel" prop="">
             <el-select
               size="small"
               placeholder="请选择省"
@@ -100,7 +99,8 @@
       </el-table-column>
       <el-table-column align="center" label="设置地址" prop="isDefault">
         <template slot-scope="scope" >
-          <span class="set"  @click="handleSetDefault(scope.row)">{{set}}</span>
+          <span class="set" v-if="scope.row.isDefault == 0"   @click="handleSetDefault(scope.row)">设为默认</span>
+          <span class="default" v-if="scope.row.isDefault == 1" >默认地址</span>
         </template>
       </el-table-column>
     </el-table>
@@ -111,24 +111,23 @@
       title="修改"
       :visible.sync="isShow"
       width="500px"
-      @close="handleCloseSystemInfo"
     >
       <div class="remark">
         <el-form :model="editData" :rules="editDataRule" ref="editData" class="ui-form">
           <el-form-item label="收货人" :label-width="formLabelWidth" prop="tax_point">
-            <el-input  size="small" v-model="editData.consignee" clearable></el-input>
+            <el-input  size="small" v-model="editData.consignee" style="width:300px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="所在地址" :label-width="formLabelWidth" prop="supplier_name">
-            <el-input size="small" v-model="editData.location" clearable></el-input>
+            <el-input size="small" v-model="editData.location" style="width:300px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="详细地址" :label-width="formLabelWidth" prop="Purchase_link">
-            <el-input size="small" v-model="editData.detail" clearable></el-input>
+            <el-input size="small" v-model="editData.detail" style="width:300px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="公司名称" :label-width="formLabelWidth" prop="Purchase_link">
-            <el-input size="small" v-model="editData.company" clearable></el-input>
+            <el-input size="small" v-model="editData.company" style="width:300px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="电话/手机" :label-width="formLabelWidth" prop="Purchase_link">
-            <el-input size="small" v-model="editData.cellphone" clearable></el-input>
+            <el-input size="small" v-model="editData.cellphone" style="width:300px;" clearable></el-input>
           </el-form-item>
           <div class="footerBtn">
             <el-button size="small" @click="handleCancel()">取消</el-button>
@@ -158,7 +157,6 @@ export default {
       isShow:false,
       tableData:[],
       formLabelWidth: "100px",
-      set:'设为默认',
       personalData: {
          province:'',
          city:'',
@@ -237,18 +235,19 @@ export default {
   //保存
  handleSave() {
     this.$refs.personalData.validate(res => {
-    if (res) {
+      if (res) {
       
-      let obj = {
-        storeId:1,
-        sellerName:this.personalData.consignee,
-        areaId:this.personalData.province,
-        cityId:this.personalData.city,
-        areaInfo:this.personalData.adventure,
-        address:this.personalData.location,
-        telphone:this.personalData.phoneNumber,
-        isDefault:this.personalData.type,
-      }
+        let obj = {
+          storeId:this.$store.state.user.storeId,
+          sellerName:this.personalData.consignee,
+          areaId:this.personalData.province,
+          cityId:this.personalData.city,
+          areaInfo:this.personalData.adventure,
+          address:this.personalData.location,
+          telphone:this.personalData.phoneNumber,
+          company:this.personalData.postalService,
+          isDefault:this.personalData.type,
+        }
        getBusinessAddress(obj).then((res)=>{
             if(res.code === '200'){
               this.$message({
@@ -280,8 +279,8 @@ export default {
 
  //列表数据
  tableDataInof() {
-    getMerchantSite({storeId:20}).then((res)=>{
-          console.log(res,'res')
+    getMerchantSite({storeId:20}).then((res)=>{   //this.$store.state.user.storeId,
+          // console.log(res,'res')
           this.tableData = res.data
       })
     },
@@ -322,10 +321,6 @@ deleteData(addressId){
   })
 },
 
-//弹框
-handleCloseSystemInfo() {
-
-},
 //弹框修改确认
 handleAffirm() {
   getModificationAddress({sellerName:this.editData,storeId:25}).then((res)=>{
@@ -333,30 +328,39 @@ handleAffirm() {
           this.$message({
             message:'修改成功',
             type:'success',
-            duration: 5 *1000
+            duration: 2 *1000
           })
           this.isShow = false
         }else{
           this.$message({
             message:res.errorMsg,
             type:'error',
-            duration: 5 *1000
+            duration: 2 *1000
           })
         }
     }).catch(()=>{
   })
 },
 
+//弹框取消
+handleCancel() {
+   
+},
+
 //设为默认地址
 handleSetDefault( row ) {
-    getDefault({addressId:row.addressId,isDefault:0}).then((res)=>{
+    getDefault({addressId:row.addressId,isDefault:row.isDefault }).then((res)=>{
        if(res.code === '200') {
-           row.set = '默认地址'
+          this.$message({
+            message:'设置成功',
+            type:'success',
+            duration: 2 *1000
+          })
        }else{
           this.$message({
             message:res.errorMsg,
             type:'error',
-            duration: 5 *1000
+            duration: 2 *1000
           })
         }
     })
@@ -423,13 +427,20 @@ handleSelectCounty(val) {
 }
 
 .footerBtn {
-  margin-left:120px;
+  margin-left:150px;
 }
 .set {
    color: red;
    cursor:pointer;
    padding:20px 20px;
    background-color:#f8cccd;
+   border-radius:5px;
+}
+.default {
+   color: #fff;
+   cursor:pointer;
+   padding:20px 20px;
+   background-color:#8cc5ff;
    border-radius:5px;
 }
 

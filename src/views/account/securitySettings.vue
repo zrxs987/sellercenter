@@ -21,11 +21,24 @@
 
            <div class="serve" >
                 <h3>您的安全服务</h3>
+                 <div class="grade">
+                    <span>
+                        安全等级：
+                    </span>
+                    <el-progress :text-inside="true"  color='gold' :stroke-width="18" :percentage="70"></el-progress>
+                    <p style=" display: inline-block;margin-left: 20px; ">
+                        完成 <span style="color:aqua">密保设置</span>，提升账户安全
+                    </p>
+                 </div>
+                 
                 <div class="securityService">
-                    <!-- <i style="font-size: 18px" class="iconfont icon-duigou"></i>  -->
-                   <span class="already">
-                       已完成
-                   </span>
+                    <p style="position: relative;">
+                        <i class="iconfont icon-duigou"></i> 
+                        <span class="already">
+                            已完成
+                        </span>
+                    </p>
+
                    <h4 class="attestation">
                        身份认证
                    </h4>
@@ -40,9 +53,12 @@
                 <span class="transverse"></span>
 
                 <div class="securityService">
+                 <p style="position: relative;">
+                   <i class="iconfont icon-duigou"></i> 
                    <span class="already">
                        已设置
                    </span>
+                </p>
                    <h4 class="attestation">
                        登录密码
                    </h4>
@@ -55,9 +71,12 @@
                 </div>
                 <span class="transverse"></span>
                 <div class="securityService">
+                 <p style="position: relative;">
+                   <i class="iconfont icon-shezhi" style="color:gold"></i> 
                    <span class="already">
                        未设置
                    </span>
+                </p>
                    <h4 class="attestation">
                        密保问题
                    </h4>
@@ -70,9 +89,12 @@
                 </div>
                 <span class="transverse"></span>
                 <div class="securityService">
+                 <p style="position: relative;">
+                   <i class="iconfont icon-duigou"></i> 
                    <span class="already">
                        已绑定
                    </span>
+                </p>
                    <h4 class="attestation">
                        绑定手机
                    </h4>
@@ -92,7 +114,11 @@
 
 <script>
 export default {
-    
+    data(){
+        return{
+            progressWidth:'100PX',
+        }
+    }
 }
 </script>
 
@@ -118,6 +144,7 @@ export default {
 
 .serve {
     overflow: hidden;
+    // margin-left: 30px;
   .securityService {
       width: 50%;
       height: 100px;
@@ -148,5 +175,20 @@ export default {
       margin-left: 20px;
       margin-top: 30px;
   }
+  .iconfont {
+      font-size: 16px;
+      color: green;
+      left: 50%;
+      position: absolute;
+  }
+  .grade {
+      margin-left: 80px;
+      width: 100%;
+     /deep/.el-progress {
+      width: 20%;
+      display: inline-block;
+    }
+  }
+
 }
 </style>

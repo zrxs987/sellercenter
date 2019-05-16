@@ -61,3 +61,24 @@ export function getIssue(data) {
 
 
 
+//添加规格值
+export function getAddStandard(data) {
+  return request({
+    url: '/xmall-front-web/specValue/addSpecValue',
+    method: 'post',
+    params: data
+  })
+}
+
+
+//根据类型id获取规格信息
+export function getIdStandard(data) {
+  return request({
+    url: '/xmall-front-web/goodsClass/selectByTypeIdOrGcId',
+    method: 'post',
+    params: data
+  })
+}
+
+
+

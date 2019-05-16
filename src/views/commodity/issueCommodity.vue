@@ -25,7 +25,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="选择分类" > 
+          <el-form-item label="选择分类"> 
             <el-cascader
               style="width:360px;"
               placeholder="请选择商品类目"
@@ -38,34 +38,8 @@
             ></el-cascader>
           </el-form-item>
 
-          <el-form-item
-            v-for="(domain, index) in issue.domains"
-            :label="'尺寸' + index"
-            :key="domain.index"
-            :prop="'domains.' + index + '.size'"
-          >
-            <el-input v-model="domain.size" placeholder="请输入商品尺寸" style="width:360px;" clearable>
-            </el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="addDomain">新增尺寸</el-button>
-          </el-form-item>
-
-
-          <el-form-item
-            v-for="(Colour, index) in issue.Colour"
-            :label="'颜色' + index"
-            :key="Colour.index"
-            :prop="'Colour.' + index + '.kind'"
-          >
-            <el-input v-model="Colour.kind" placeholder="请输入商品颜色" style="width:360px;" clearable>
-            </el-input><el-button @click.prevent="removeColour(Colour)">删除</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="addColour">新增颜色</el-button>
-          </el-form-item>
-  
           <el-form-item label="选择产地" >
+           <!-- <el-input  v-model="issue.add" style="display:none;"></el-input> -->
             <el-select
               size="small"
               style="width:118px;"
@@ -134,9 +108,60 @@
           <div class="buttonBtn">
             <el-button type="primary" @click="handleCancel()">重置</el-button>
             <el-button type="primary" @click="handleSubmit()">提交</el-button>
+            <el-button type="primary" @click="handleStandard()">添加规格</el-button>
           </div>
         </el-form>
       </div>
+
+    <!-- 添加规格-->
+    <el-dialog
+      class="ui-layout_edit-dialog"
+      title="添加规格"
+      :visible.sync="isShow"
+      width="700px"
+    >
+        <el-form  class="standardForm clearfix"  :model="standard" style='magin-top:30px;' label-width="40px">
+        
+          <div class="standard" v-for="item in standardList" :key="item.id">
+              <el-form-item  label="尺寸">       
+                <el-input v-model="standard.email"  style="width:120px;"></el-input>
+              </el-form-item>
+              <el-form-item
+                v-for="(domain) in standard.domains"
+                :key="domain.index"
+              >
+                <el-input v-model="domain.size"  style="width:120px;" clearable>
+                </el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button @click="addDomain">新增尺寸</el-button>
+              </el-form-item>
+          </div>
+          
+          <div class="standard" v-for="item in standardList" :key="item.id">
+              <el-form-item  label="尺寸">       
+                <el-input v-model="standard.email"  style="width:120px;"></el-input>
+              </el-form-item>
+              <el-form-item
+                v-for="(domain) in standard.domains"
+                :key="domain.index"
+              >
+                <el-input v-model="domain.size"  style="width:120px;" clearable>
+                </el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button @click="addDomain">新增尺寸</el-button>
+              </el-form-item>
+          </div>
+
+ 
+        </el-form> 
+          <div class="footerBtn" style=" margin-left: 240px;">
+            <el-button size="small" @click="handleStandardCancel()">取消</el-button>
+            <el-button size="small" type="primary" @click="handleStandardAffirm()">确认</el-button>
+          </div>
+    </el-dialog>
+
     </div>
 </template>
 
@@ -144,19 +169,31 @@
 import upload from "@/components/publicMethod/upload";
 import progressBar from "@/components/publicMethod/progressBar";
 
-import { getClassify,getClassifyCut,getTrademark,getIssue ,getAdventure} from "@/api/commodity";
+import { getClassify,
+         getClassifyCut,
+         getTrademark,getIssue ,
+         getAdventure,getAddStandard,
+         getIdStandard,
+         } from "@/api/commodity";
+
 import { getAddressInfo,getCity } from "@/api/level3Linkage.js";
-import { log } from 'util';
+// import { log } from 'util';
 
 export default {
-  name:'issueCommodity',
+  // name:'issueCommodity',
   components: {
     upload,
     progressBar
   },
   data() {
     return {
-      dialogFormVisible:false,
+      //添加规格
+      standard:{
+        domains: [ {size:''}],
+        Colour: [ {kind:''}],
+      },
+      standardList:[],
+      isShow:false,
       //发布商品定义
       issue: {
         expressage: '',
@@ -165,8 +202,7 @@ export default {
         district: '',
         brand:'',
         goodsName:'',
-        domains: [ {size:''}],
-        Colour: [ {kind:''}],
+
       },
       //下拉数据
       optionList: {
@@ -210,13 +246,6 @@ export default {
             trigger: "blur"
            }
         ],
-        selectedOptions: [
-            {
-            required: true,
-            message: "带*号不能为空",
-            trigger: "blur"
-           }
-        ],
         brand: [
             {
             required: true,
@@ -224,27 +253,20 @@ export default {
             trigger: "blur"
            }
         ],
-        shopName: [
+        add: [
             {
             required: true,
             message: "带*号不能为空",
             trigger: "blur"
            }
         ],
-        classes: [
-            {
-            required: true,
-            message: "带*号不能为空",
-            trigger: "blur"
-           }
-        ],
-        orderPara: [
-            {
-            required: true,
-            message: "带*号不能为空",
-            trigger: "blur"
-           }
-        ],
+        // classes: [
+        //     {
+        //     required: true,
+        //     message: "带*号不能为空",
+        //     trigger: "blur"
+        //    }
+        // ],
       }
     };
   },
@@ -266,7 +288,7 @@ export default {
               goodsPromotionPrice:this.issue.tradePrice,
               goodsMarketprice:this.issue.retailPrice,
               goodsImage:this.masterMap,
-              // goodsJingle:this.textImg,
+              //goodsJingle:this.textImg,
               goodsBody:this.issue.categoryInfo,
               brandId:this.issue.brand,
               areaid1:this.issue.province,
@@ -294,7 +316,7 @@ export default {
                   })
                 }
              })
-        }
+          }
       });
     },
 
@@ -360,7 +382,7 @@ export default {
     firstData(){
 
         getClassify().then(res=>{
-          // console.log(res);
+          // console.log(res,'1');
           this.options = res.data;
           this.classifyOptions = res.data;
             for(let i=0;i<this.classifyOptions.length;i++){
@@ -376,7 +398,7 @@ export default {
       handItemChange(e){
         if(e.length ==2){
             this.handleChange(e);
-        }
+       }
     },
   //下级分类
     handleChange( val) {
@@ -386,7 +408,7 @@ export default {
                     for(let j=0;j<this.classifyOptions[i].goodsClassPc.length;j++){
                       if(this.classifyOptions[i].gcId ==val[0] && this.classifyOptions[i].goodsClassPc[j].gcId ==val[1] ){
                            this.classifyOptions[i].goodsClassPc[j].goodsClassPc = res.data;
-                            //  console.log(this.classifyOptions);
+                            //  console.log(this.classifyOptions,'2');
                   }
                }
             }
@@ -405,14 +427,14 @@ export default {
 
   //删除尺寸
   removeDomain(item) {
-    var index = this.issue.domains.indexOf(item)
+    var index = this.standard.domains.indexOf(item)
     if (index !== -1) {
-      this.issue.domains.splice(index, 1)
+      this.standard.domains.splice(index, 1)
     }
   },
   //新增尺寸
   addDomain() {
-    this.issue.domains.push({
+    this.standard.domains.push({
       size: '',
       key: Date.now()
     });
@@ -420,24 +442,47 @@ export default {
 
   //删除颜色
   removeColour(item) {
-    var index = this.issue.Colour.indexOf(item)
+    var index = this.standard.Colour.indexOf(item)
     if (index !== -1) {
-      this.issue.Colour.splice(index, 1)
+      this.standard.Colour.splice(index, 1)
     }
   },
 
   //新增尺寸
   addColour() {
-    this.issue.Colour.push({
+    this.standard.Colour.push({
       size: '',
       key: Date.now()
     });
   },
 
+//添加规格
+handleStandard( ){
+   this.isShow = true
+   getIdStandard({gcId:this.orderPara[0]}).then((res)=>{
+      //  console.log('res1',res)
+       res.data = res.data.map( item => {
+          return {
+            ...item,
+            spName: item.typeSpecList.length == 0 ? '' : item.typeSpecList[0].spec.spName
+             
+          }
+        })
+  
+       this.standardList = res.data
+   })
+},
+//规格取消
+handleStandardCancel() {
+
+},
+//规格确认
+handleStandardAffirm() {
+   
+},
 
 }
 };
-
 </script>
 
 
@@ -456,6 +501,18 @@ export default {
 
 /deep/.el-textarea__inner {
     width: 54% !important;
+    
 }
+.standardForm {
+  overflow: hidden;
+  .standard {
+    width: 200px;
+    float: left !important;
+  }
+  // .footerBtn {
+  //   margin-bottom: 20px !important;
+  // }
+}
+
 
 </style>

@@ -11,8 +11,9 @@
                    <p><span>店铺等级：</span><span>普通会员</span></p>
              </div>
              <div class="module">
-                 <div style="background-color: #fe686a;">
+                 <div style="background-color: #fe686a;position: relative;">
                      <p>今日订单</p>
+                     <i class="iconfont icon-dingdan"></i>
                      <p class="figure">88</p>
                      <div class="audit">
                          <span>出售中</span>
@@ -21,8 +22,9 @@
                          <span>仓库中已审核</span>
                      </div>
                  </div>
-                 <div style="background-color: #f9b143;">
+                 <div style="background-color: #f9b143;position: relative;">
                      <p>成交金额</p>
+                     <i class="iconfont icon-jineqiandaiyueshangjin"></i>
                      <p class="figure">10000</p>
                      <p class="turnover" style=" font-size:16px;">
                          <span>昨日销量</span>
@@ -35,9 +37,10 @@
                          <span>￥9521000</span>
                      </p>
                  </div>
-                 <div style="background-color: #4dc3eb;">
+                 <div style="background-color: #4dc3eb;position: relative;">
                      <p>交易提示</p>
                      <p class="figure">1198</p>
+                     <i class="iconfont icon-icon"></i>
                      <div class="audit">
                          <span>待付款</span>
                          <span>待发货</span>
@@ -49,8 +52,9 @@
                          <span>待确认订单</span>
                      </div>
                  </div>
-                 <div style="background-color: #9f97ec;">
+                 <div style="background-color: #9f97ec;position: relative;">
                      <p>系统公告</p>
+                     <i class="iconfont icon-buoumaotubiao19"></i>
                      <p style="font-size:16px;line-height: 40px;">平台联系方式</p>
                      <p class="turnover" style=" font-size:16px;">
                          <span>电话</span>
@@ -61,8 +65,9 @@
                          <span>1501380234@qq.com</span>
                      </p>
                  </div>
-                 <div style="background-color: #b54deb;">
+                 <div style="background-color: #b54deb;position: relative;">
                      <p>钱包</p>
+                     <i class="iconfont icon-qianbao"></i>
                      <p class="figure">1198</p>
                      <p class="turnover" style=" font-size:16px;">
                          <span>￥1500.02</span>
@@ -91,9 +96,8 @@ export default {
     methods:{
         //编辑店铺信息
         handleCompile() {
-            this.$router.push({
-                path:'./personalData'
-          }); 
+
+           this.$router.push({path:'/personalDetails/personalData'})
         },
     }
 }
@@ -156,10 +160,17 @@ export default {
                  line-height: 10px;
                  span {
                      margin-right: 30px;
+                    
                  }
              }
+             .iconfont {
+                 position: absolute;
+                 font-size: 55px !important;
+                 right: 50px;
+                 top: 30px;
+                 color: #fff; 
+              }
            }
-
         }
     }
 </style>

@@ -32,3 +32,13 @@ export function getBusinessState(data) {
 }
 
 
+//删除
+export function getDelete(data) {
+  return request({
+    url: '/xmall-front-web/daddress/delete',
+    method: 'post',
+    params: data
+  })
+}
+
+

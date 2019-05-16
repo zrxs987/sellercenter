@@ -17,8 +17,11 @@
         </el-form-item>
         <el-form-item label="再次输入">
           <el-input placeholder="请在次输入密码" v-model="reset.enterAgain" :type="passwordType" @blur='passRegs'></el-input>
+          <router-link to='./login'>
+            <span style=" font-size: 16px;;color: #fff;margin-left: 250px;">返回登录</span>
+           </router-link>
         </el-form-item>
-          <el-button  type="primary" style="width:80%;margin-bottom:30px;margin-left: 80px;" @click.native.prevent="handleLogin">重置密码</el-button>
+          <el-button  type="primary" style="width:80%;margin-top:-20px;margin-left: 80px;" @click.native.prevent="handleLogin">重置密码</el-button>
       </el-form>
     </div>
   </div>
@@ -180,6 +183,7 @@ export default {
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
+     
     }
   }
 }

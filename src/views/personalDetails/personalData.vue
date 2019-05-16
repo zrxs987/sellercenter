@@ -170,7 +170,7 @@ export default {
     this.personalData = {}
     this.$refs.personalData.resetFields();
     
-  }
+   }
   }
 };
 </script>

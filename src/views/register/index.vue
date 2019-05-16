@@ -48,7 +48,11 @@
         <el-form-item class="shoppingMall">
           <el-checkbox v-model="reset.checked">同意云端商城的</el-checkbox>
           <span class="purchase"  style="color: #dc0203;cursor:pointer;" @click="handlePurchaseInfo()">《购买协议》</span> 
+          <router-link to='./login'>
+            <span style=" font-size: 16px;;color: #fff;margin-left: 30px;">返回登录</span>
+           </router-link>
         </el-form-item>
+
             <el-button  type="primary" style="width:80%;margin-bottom:30px;margin-left: 80px;" @click="handleRegister">注册</el-button>
       </el-form>
     </div>
@@ -272,6 +276,7 @@ export default {
   color: aliceblue;
   font-size: 16px;
   padding-left: 20px;
+  
 }
 
 </style>
