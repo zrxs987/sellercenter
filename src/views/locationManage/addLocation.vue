@@ -349,7 +349,7 @@ handleCancel() {
 
 //设为默认地址
 handleSetDefault( row ) {
-    getDefault({addressId:row.addressId,isDefault:row.isDefault }).then((res)=>{
+    getDefault({addressId:row.addressId,isDefault:1 }).then((res)=>{
        if(res.code === '200') {
           this.$message({
             message:'设置成功',

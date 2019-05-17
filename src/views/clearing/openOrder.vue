@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
  <div class="filter-container">
-      <el-row >
+      <!-- <el-row > -->
       
             <!-- <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
                <el-col :span="6"  >
@@ -34,7 +34,7 @@
                 <el-button type="primary"  @click="handleInquire">查询</el-button>
               </div>
             </el-form>  -->
-        </el-row>
+        <!-- </el-row> -->
     </div>
 
     <el-table
@@ -47,7 +47,7 @@
       :header-cell-style="{background:'#dee1e6'}" 
       style="width: 100%;" 
     >
-
+     <el-table-column type="index"  :index="indexMethod" align="center" label="序号" width="50"> </el-table-column>
       <el-table-column align="center" label="结算时间" >
         <template slot-scope="scope">
           {{ scope.$index }}
@@ -118,10 +118,15 @@ export default {
   },
   methods: {
     fetchData() {
-       getClearingList({storeId:3,settlementStatus:2}).then((res)=>{
+       getClearingList({storeId:this.$store.state.user.sellerId,settlementStatus:2}).then((res)=>{
             this.tableData = res.data
        })
     },
+
+   //table序号
+  indexMethod(index) {
+    return ++index * 1;
+  },
     //年月日时间
     changeStartTime() {
 

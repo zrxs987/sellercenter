@@ -39,12 +39,12 @@
       </el-table-column>
       <el-table-column align="center" label="快递信息" prop="expressage">
         <template slot-scope="scope">
-          <span style="color:#FF6464;" @click="handleExpressage(scope.row)">查看详情</span>
+          <span class="examine" @click="handleExpressage(scope.row)">查看详情</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="换货信息" prop="exchangeGoods">
         <template slot-scope="scope">
-          <span style="color:#FF6464;" @click="handleExchangeGoods(scope.row)">查看详情</span>
+          <span class="examine"  @click="handleExchangeGoods(scope.row)">查看详情</span>
         </template>
       </el-table-column>
             <el-table-column align="center" prop="address" label="操作">
@@ -138,7 +138,6 @@ export default {
       expressage:{
          senders:'张三 18012345678',
          location:'广东省深圳市南山区高新园泰邦大厦',
-
       },
       //换货信息
       barter:{
@@ -153,7 +152,7 @@ export default {
   methods: {
      fetchData() {
       this.loading = true;
-       getReturnManagementList({ storeId: 3, orderGoodsRefundStatus: 3 })
+       getReturnManagementList({ storeId: 3, orderGoodsRefundStatus: 3 }) // this.$store.state.user.storeId
         .then(res => {
            if (res.code === "200") {
             this.loading = false;
@@ -250,4 +249,6 @@ export default {
  .information {
    font-size: 16px;
  }
+
+
 </style>

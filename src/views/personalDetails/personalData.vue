@@ -9,60 +9,14 @@
           <upload :show="false" @on-Success="bankImgonSuccess"/>
         </el-form-item>
         <el-form-item label="店铺名称" prop="setPwd">
-          <el-input placeholder='请输入店铺名称' v-model="personalData.setPwd" style="width:360px;"></el-input>
+          <el-input  v-model="personalData.setPwd" style="width:360px;" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="开店日期" prop="enterAgain">
+          <el-input  v-model="personalData.enterAgain" style="width:360px;" disabled></el-input>
         </el-form-item>
         <el-form-item label="营业执照" prop="enterAgain">
           <el-input placeholder='请输入营业执照名称' v-model="personalData.enterAgain" style="width:360px;"></el-input>
         </el-form-item>
-
-        <el-form-item label="开店日期">
-          <el-select size="small" placeholder="请选择年" v-model="personalData.province"
-             @change="handleSelectProvince"
-             style="width:118px;"
-              clearable>                 
-            <el-option
-              v-for="(label, value) in optionList.provinceList"
-              :key="value"
-              :value="value"
-              :label="label"
-            ></el-option>
-          </el-select>
-          <el-select  size="small" placeholder="请选择月" style="width:118px;" v-model="personalData.city"  @change="handleSelectCounty"
-           clearable >                                          
-            <el-option
-              v-for="(label, value) in optionList.cityList"
-              :key="value"
-              :value="value"
-              :label="label"
-            ></el-option>
-          </el-select>
-          <el-select size="small" placeholder="请选择日" style="width:118px;" v-model="personalData.district" clearable>
-            <el-option
-              v-for="(label, value) in optionList.districtList"
-              :key="value"
-              :value="value"
-              :label="label"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="银行账号" prop="district">
-            <el-select
-              size="medium"
-              style="width:360px;"
-              placeholder="请选择银行账号"
-              v-model="personalData.district"
-              clearable
-            >
-              <el-option
-                v-for="(item, value) in optionList.districtList"
-                :key="value"
-                :value="value"
-                :label="item.eName"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-
          <div class="upload-box clearfix">
             <el-form-item label>
               <span class="upload-img">营业执照</span>
@@ -84,7 +38,7 @@
 
 <script>
 import upload from "@/components/publicMethod/upload";
-import {getShopInfo} from '@/api/personalDetails';
+import {getShopInfo,getShopData} from '@/api/personalDetails';
 
 export default {
   name: "personalData",
@@ -137,27 +91,20 @@ export default {
        this.account = key
     },
     //头像
-    bankImgonSuccess(){
-
+    bankImgonSuccess( key ){
+        this.headPortrait = key
     },
 
-    handleSelectProvince() {
-
-    },
-    handleSelectCounty() {
-
-    },
     //提交
     handleSubmit() {
       this.$refs.personalData.validate(res => {
         if (res) {
              let obj = {
-               sellerId:this.$store.state.user.sellerId,
-               realName:this.personalData.setPwd,
-               residentialAddress:this.personalData.enterAgain,
-               realName:this.personalData.setPwd,
-               business:this.business,
-               account:this.account,
+               storeId:this.$store.state.user.sellerId,
+               storeAvatar:this.headPortrait, 
+               storeBusinessLicense: this.personalData.enterAgain,
+               storePictureBusinessLicense:this.business,
+               accountOpeningPermit:this.account,
              }
              getShopInfo( obj ).then((res)=>{
                   console.log(res,444)

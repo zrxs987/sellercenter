@@ -120,10 +120,11 @@
       :visible.sync="isShow"
       width="700px"
     >
-        <el-form  class="standardForm clearfix"  :model="standard" style='magin-top:30px;' label-width="40px">
+        <el-form  class="standardForm clearfix" :model="standard" style='magin-top:30px;' label-width="40px">
         
-          <div class="standard" v-for="item in standardList" :key="item.id">
-              <el-form-item  label="尺寸">       
+          <div class="standard" v-for="item in spNameList" :key="item.id">
+              <el-form-item > 
+                <span  class="upload-img">{{item}}</span>      
                 <el-input v-model="standard.email"  style="width:120px;"></el-input>
               </el-form-item>
               <el-form-item
@@ -134,27 +135,42 @@
                 </el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
               </el-form-item>
               <el-form-item>
-                <el-button @click="addDomain">新增尺寸</el-button>
-              </el-form-item>
-          </div>
-          
-          <div class="standard" v-for="item in standardList" :key="item.id">
-              <el-form-item  label="尺寸">       
-                <el-input v-model="standard.email"  style="width:120px;"></el-input>
-              </el-form-item>
-              <el-form-item
-                v-for="(domain) in standard.domains"
-                :key="domain.index"
-              >
-                <el-input v-model="domain.size"  style="width:120px;" clearable>
-                </el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
-              </el-form-item>
-              <el-form-item>
-                <el-button @click="addDomain">新增尺寸</el-button>
+                <el-button type="primary" @click="submitForm('standard')">提交</el-button>
+                <el-button @click="addDomain">新增{{item}}</el-button>
               </el-form-item>
           </div>
 
+     <el-table
+      :data="tableData"
+      border
+      :header-cell-style="{background:'#dee1e6'}" 
+      style="width: 100%; margin-right: 60px;">
+      <el-table-column
+        prop="id"
+        label="ID"
+        >
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="姓名">
+      </el-table-column>
+      <el-table-column
+        prop="amount1"
+
+        label="数值 1">
+      </el-table-column>
+      <el-table-column
+        prop="amount2"
  
+        label="数值 2">
+      </el-table-column>
+      <el-table-column
+        prop="amount3"
+    
+        label="数值 3">
+      </el-table-column>
+    </el-table>
+
         </el-form> 
           <div class="footerBtn" style=" margin-left: 240px;">
             <el-button size="small" @click="handleStandardCancel()">取消</el-button>
@@ -174,10 +190,10 @@ import { getClassify,
          getTrademark,getIssue ,
          getAdventure,getAddStandard,
          getIdStandard,
-         } from "@/api/commodity";
+        } from "@/api/commodity";
 
 import { getAddressInfo,getCity } from "@/api/level3Linkage.js";
-// import { log } from 'util';
+import { log } from 'util';
 
 export default {
   // name:'issueCommodity',
@@ -187,6 +203,7 @@ export default {
   },
   data() {
     return {
+      tableData:[],
       //添加规格
       standard:{
         domains: [ {size:''}],
@@ -202,12 +219,9 @@ export default {
         district: '',
         brand:'',
         goodsName:'',
-
       },
       //下拉数据
-      optionList: {
-
-      },
+      optionList: {},
       classifyOptions:[],
       orderPara:[],
       options:[],
@@ -267,7 +281,8 @@ export default {
         //     trigger: "blur"
         //    }
         // ],
-      }
+      },
+      spNameList:[],
     };
   },
   created() {
@@ -395,7 +410,7 @@ export default {
        })
     },
 
-      handItemChange(e){
+    handItemChange(e){
         if(e.length ==2){
             this.handleChange(e);
        }
@@ -408,7 +423,7 @@ export default {
                     for(let j=0;j<this.classifyOptions[i].goodsClassPc.length;j++){
                       if(this.classifyOptions[i].gcId ==val[0] && this.classifyOptions[i].goodsClassPc[j].gcId ==val[1] ){
                            this.classifyOptions[i].goodsClassPc[j].goodsClassPc = res.data;
-                            //  console.log(this.classifyOptions,'2');
+                            //console.log(this.classifyOptions,'2');
                   }
                }
             }
@@ -440,46 +455,39 @@ export default {
     });
   },
 
-  //删除颜色
-  removeColour(item) {
-    var index = this.standard.Colour.indexOf(item)
-    if (index !== -1) {
-      this.standard.Colour.splice(index, 1)
-    }
-  },
-
-  //新增尺寸
-  addColour() {
-    this.standard.Colour.push({
-      size: '',
-      key: Date.now()
-    });
-  },
-
-//添加规格
-handleStandard( ){
-   this.isShow = true
-   getIdStandard({gcId:this.orderPara[0]}).then((res)=>{
-      //  console.log('res1',res)
-       res.data = res.data.map( item => {
-          return {
-            ...item,
-            spName: item.typeSpecList.length == 0 ? '' : item.typeSpecList[0].spec.spName
-             
-          }
-        })
+//提交
+submitForm() {
   
-       this.standardList = res.data
+},
+
+//获取规格名称
+handleStandard( ) {
+   this.isShow = true
+    getIdStandard({gcId:this.orderPara[0]}).then((res)=>{
+
+      this.standardList = res.data
+
+    for(let i=0;i<this.standardList.length;i++){
+       if(this.standardList[i].typeSpecList){
+           for(let j=0;j<this.standardList[i].typeSpecList.length;j++) {
+              
+              this.spNameList.push(this.standardList[i].typeSpecList[j].spec.spName)
+           }
+
+        }
+      }
    })
 },
+
 //规格取消
 handleStandardCancel() {
-
+  
 },
 //规格确认
 handleStandardAffirm() {
    
 },
+
 
 }
 };
@@ -496,23 +504,27 @@ handleStandardAffirm() {
 }
 
 .buttonBtn {
-  margin-left: 180px;
+  margin-left: 120px;
 }
 
 /deep/.el-textarea__inner {
-    width: 54% !important;
-    
+    width: 54% !important;  
 }
+
 .standardForm {
   overflow: hidden;
   .standard {
-    width: 200px;
+    width: 240px;
     float: left !important;
   }
-  // .footerBtn {
-  //   margin-bottom: 20px !important;
-  // }
+}
+.upload-img {
+  margin-left: -30px;
+  // margin-top: 80px;
+  line-height: 40px;
 }
 
-
+/deep/.el-dialog__body{
+  padding-right: 60px;
+}
 </style>

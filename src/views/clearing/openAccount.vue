@@ -1,9 +1,8 @@
 <template>
   <div class="app-container">
  <div class="filter-container">
-      <el-row >
-          <!-- <el-col :span="24" > -->
-            <!-- <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
+      <!-- <el-row >
+            <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
                <el-col :span="6"  >
                  <span>成交时间：</span>
                     <el-date-picker
@@ -34,8 +33,8 @@
                 <el-button type="primary"  @click="handleInquire">查询</el-button>
                 <el-button type="primary"  @click="handleDownload">导出</el-button>
               </div>
-            </el-form> -->
-        </el-row>
+            </el-form>
+        </el-row> -->
     </div>
 
     <el-table
@@ -46,9 +45,8 @@
       fit
       highlight-current-row
       :header-cell-style="{background:'#dee1e6'}" 
-      @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" align="center" />
+       <el-table-column type="index"  :index="indexMethod" align="center" label="序号" width="50"> </el-table-column>
       <el-table-column align="center" label="订单编号" width="260" prop="orderSn">
       </el-table-column>
       <el-table-column label="收货人" align="center" prop="buyerName">
@@ -59,12 +57,10 @@
       </el-table-column>
       <el-table-column align="center" label="订单状态" prop="orderState">
       </el-table-column>
-      <el-table-column align="center" label="发货状态">
-
+      <!-- <el-table-column align="center" label="发货状态">
       </el-table-column>
       <el-table-column align="center" label="配送状态" >
-
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center" label="结算状态" >
           <template slot_scope="scope">
             <span>未结算</span>
@@ -75,7 +71,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" >
         <template slot-scope="scope">
-          <span style="color: rgb(25, 211, 197);cursor:pointer;margin-left: 0;" class="line"  @click="handelDelete(scope.row)" >删除</span>
+          <span style="color: #409eff;cursor:pointer;margin-left: 0;" class="line"  @click="handleDelete(scope.row)" >删除</span>
         </template>
       </el-table-column>
     </el-table>
@@ -143,6 +139,10 @@ export default {
           });
     },
 
+   //table序号
+  indexMethod(index) {
+    return ++index * 1;
+  },
     //年月日时间
     changeStartTime() {
 
@@ -155,38 +155,27 @@ export default {
     handleReset() {
        
     },
-    //插槽删除
-    handelDelete() {
 
-    },
-
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
-    // 导出按钮
-    handleDownload() {
-      if (this.multipleSelection.length) {
-        this.downloadLoading = true
-        import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']
-          const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']
-          const list = this.multipleSelection
-          const data = this.formatJson(filterVal, list)
-          excel.export_json_to_excel({
-            header: tHeader,
-            data,
-            filename: this.filename
-          })
-          this.$refs.multipleTable.clearSelection()
-          this.downloadLoading = false
-        })
-      } else {
+   //删除
+  handleDelete( row ) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteData(row.orderSn)
         this.$message({
-          message: '请至少选择一项',
-          type: 'warning'
-        })
-      }
-    },
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
+  },
+
   }
 }
 </script>

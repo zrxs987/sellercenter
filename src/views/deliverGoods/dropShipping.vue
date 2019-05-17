@@ -194,7 +194,7 @@ export default {
 
     fetchData() {
       this.loading = true;
-      getMerchantOrder({ storeId: 3, orderState: 20 })
+      getMerchantOrder({ storeId: 3, orderState: 20 }) // this.$store.state.user.storeId
         .then(res => {
            if (res.code === "200") {
             this.loading = false;
@@ -224,19 +224,19 @@ export default {
        this.tableSelectData = row;
           let idArr = [];
           this.tableSelectData.forEach(item => {
-              idArr.push(item.paySn)
+              idArr.push(item.orderId)
           });
-          this.paySnId = idArr.join(',')
+          this.orderIdId = idArr.join(',')
     },
 
-    //添加
+    //发货
     handleInquire() {
         let obj = {
           areaId:this.systemInformation.province,
           cityId:this.systemInformation.city,
           address:this.systemInformation.site,
           expressage:this.systemInformation.expressage,
-          paySn:this.paySnId,
+          paySn:this.orderIdId,
         }
         getBusinessAddress( obj ).then((res)=>{
           

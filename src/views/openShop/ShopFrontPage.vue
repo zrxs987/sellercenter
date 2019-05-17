@@ -19,6 +19,8 @@
                          <span>出售中</span>
                          <span>发布平台审核</span>
                          <span>平台审核失败</span>
+                     </div>
+                     <div class="audit">
                          <span>仓库中已审核</span>
                      </div>
                  </div>

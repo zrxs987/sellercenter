@@ -38,7 +38,7 @@
       </el-table-column>
      <el-table-column align="center" label="快递信息">
         <template slot-scope="scope">  
-          <span style="color:#FF6464;" @click="handleExchangeGoods(scope.row)">查看详情</span>
+          <span class="examine" @click="handleExchangeGoods(scope.row)">查看详情</span>
         </template>
       </el-table-column>
     </el-table>
@@ -92,7 +92,7 @@ export default {
   methods: {
      fetchData() {
       this.loading = true;
-       getReturnManagementList({ storeId: 3, orderGoodsRefundStatus: 2 })
+       getReturnManagementList({ storeId: 3, orderGoodsRefundStatus: 2 }) // this.$store.state.user.storeId
         .then(res => {
            if (res.code === "200") {
             this.loading = false;
@@ -104,6 +104,7 @@ export default {
                  orderSn: item.orders.orderSn,
               }
             })
+
             this.tableData = res.data;
           } else {
             this.$message({

@@ -25,7 +25,6 @@
       border
       fit
       :header-cell-style="{background:'#dee1e6'}" 
-      
     >
       <el-table-column type="index" :index="indexMethod" align="center" label="序号" width="50">
       </el-table-column>
@@ -139,7 +138,7 @@ export default {
 
   fetchData() {
      this.loading = true;
-       getMerchantOrder({ storeId: 3, orderState: 30 })
+       getMerchantOrder({ storeId: 3, orderState: 30 })   //this.$store.state.user.storeId
         .then(res => {
           if (res.code === "200") {
             this.loading = false;
@@ -192,10 +191,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
- .examine {
-   color: #FF6464;
-   cursor: pointer;
- }
+
  //弹框
   .remark {
    margin-top: -30px;

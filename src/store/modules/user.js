@@ -19,8 +19,8 @@ const mutations = {
   // SET_AVATAR: (state, avatar) => {
   //   state.avatar = avatar
   // },
-  SET_TOKEN: (state, token) => {
-    state.token = token
+  SET_TOKEN: (state, sellerToken) => {
+    state.token = sellerToken
   },
   SET_SHOPID: (state, sellerId) => {
     state.sellerId = sellerId
@@ -50,7 +50,7 @@ const actions = {
         
         const data = response.data
 
-        commit('SET_TOKEN', data.token)
+        commit('SET_TOKEN', data.sellerToken)
         commit('SET_SHOPID', data.sellerId)
         commit('SET_SELLERNAME', data.sellerName)
         commit('SET_MEMBERID', data.memberId)
