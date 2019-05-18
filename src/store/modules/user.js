@@ -47,7 +47,8 @@ const actions = {
            sellerName:userInfo.username, memberPasswd: userInfo.password
       }
       login({...obj}).then(response => {
-        
+          if(response.code =='200') {
+
         const data = response.data
 
         commit('SET_TOKEN', data.sellerToken)
@@ -57,6 +58,19 @@ const actions = {
 
         setToken(data.token)
         resolve()
+            this.$message({
+              message: res.errorMsg,
+              type: 'success',
+              duration: 5 * 1000
+            })
+          }else{
+            this.$message({
+              message: res.errorMsg,
+              type: 'error',
+              duration: 5 * 1000
+            })
+          }
+
       }).catch(error => {
         reject(error)
       })

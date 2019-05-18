@@ -79,20 +79,20 @@ export default {
                 { min: 2, max: 4, message: "长度在 2 到 4 个字符", trigger: "blur" }
              ],
       phoneNumber:[ 
-               {
-                required: true,
-                pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
-                message: '请输入正确的手机号',
-                trigger: 'blur',
-              }
-           ],
+                {
+                  required: true,
+                  pattern: /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/,
+                  message: '请输入正确的手机号',
+                  trigger: 'blur',
+                }
+            ],
       WechatID: [
                   {
                   required: true,
                   message: "带*号不能为空",
                   trigger: "blur"
                 }
-            ],
+             ],
       upload: [
                 {
                 required: true,

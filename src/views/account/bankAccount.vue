@@ -1,19 +1,17 @@
 <template>
   <div class="app-container">
- <div style="overflow: hidden;" >
-        <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
-      
-                <el-button  type="primary"  @click="handleReset">添加银行卡</el-button>
-
-        </el-form>
-    </div>
+      <div style="overflow: hidden;" >
+          <el-form :inline="true" class="headerForm"  style="margin-bottom: 1.5%;">
+                  <el-button  type="primary"  @click="handleReset">添加银行卡</el-button>
+          </el-form>
+      </div>
 
     <el-table
-      ref="multipleTable"
+       ref="multipleTable"
       :data="tableData"
-      element-loading-text="拼命加载中"
-      border
-      fit
+       element-loading-text="拼命加载中"
+       border
+       fit
       :header-cell-style="{background:'#dee1e6'}" 
     >
       <el-table-column type="index" :index="indexMethod" align="center" label="序号" width="50">
@@ -21,15 +19,13 @@
       <el-table-column align="center"  label="银行名称" prop="orderSn">
       </el-table-column>
       <el-table-column  align="center" label="支行"  prop="goodsName">
-
       </el-table-column>
       <el-table-column align="center"  label="账号"  prop="orderState">
-
       </el-table-column>
       <el-table-column align="center" label="户主姓名" prop="orderState">
       </el-table-column>
-
     </el-table>
+
      <!-- 弹框 -->
     <el-dialog
       class="ui-layout_edit-dialog"
@@ -40,23 +36,22 @@
     >
       <div class="remark">
         <el-form :model="editData" :rules="editDataRule" ref="editData" class="ui-form">
-          <el-form-item label="身份证号" :label-width="formLabelWidth" prop="identityCard">
-            <el-input size="small" v-model="editData.identityCard" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="姓名" :label-width="formLabelWidth" prop="addressName">
-            <el-input size="small" v-model="editData.addressName" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="开户银行" :label-width="formLabelWidth" prop="depositBank">
-            <el-input size="small" v-model="editData.depositBank" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="开户支行" :label-width="formLabelWidth" prop="openingBranch">
-            <el-input size="small" v-model="editData.openingBranch" clearable></el-input>
-          </el-form-item>
-
-          <div class="footerBtn">
-            <el-button size="small" @click="handleCancel()">取消</el-button>
-            <el-button size="small" type="primary" @click="handleAffirm()">确认</el-button>
-          </div>
+            <el-form-item label="身份证号" :label-width="formLabelWidth" prop="identityCard">
+              <el-input size="small" v-model="editData.identityCard" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="姓名" :label-width="formLabelWidth" prop="addressName">
+              <el-input size="small" v-model="editData.addressName" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="开户银行" :label-width="formLabelWidth" prop="depositBank">
+              <el-input size="small" v-model="editData.depositBank" clearable></el-input>
+            </el-form-item>
+            <el-form-item label="开户支行" :label-width="formLabelWidth" prop="openingBranch">
+              <el-input size="small" v-model="editData.openingBranch" clearable></el-input>
+            </el-form-item>
+            <div class="footerBtn">
+              <el-button size="small" @click="handleCancel()">取消</el-button>
+              <el-button size="small" type="primary" @click="handleAffirm()">确认</el-button>
+            </div>
         </el-form>
       </div>
     </el-dialog>
@@ -92,31 +87,26 @@ export default {
         type: undefined,
         sort: '+id'
       },
-      
      editData:{},
-
      editDataRule:{
          identityCard: [
-             { required: true, message: "银行卡", trigger: "blur" },
-             { min: 18, max: 18, message: "长度在 18位数", trigger: "blur" }
-        ],
+                  { required: true, message: "身份证", trigger: "blur" },
+                  { min: 15, max: 18, message: "长度在 15位数到18位数", trigger: "blur" }
+              ],
       addressName: [
-              {
-            required: true,
-            message: "带*号不能为空",
-            trigger: "blur"
-           }
-        ],
+                 { required: true, message: "请输入姓名", trigger: "blur" },
+                 { min: 2, max: 4, message: "长度在 2 到 4 个字符", trigger: "blur" }
+              ],
      depositBank: [
-             { required: true, message: "银行卡", trigger: "blur" },
-             { min: 18, max: 18, message: "长度在 18位数", trigger: "blur" }
-        ],
+                { required: true, message: "银行卡", trigger: "blur" },
+                { min: 15, max: 19, message: "长度在 15位数到19位数", trigger: "blur" }
+             ],
      openingBranch: [
-             { required: true, message: "银行卡", trigger: "blur" },
-             { min: 18, max: 18, message: "长度在 18位数", trigger: "blur" }
-        ],
-     },
-    }
+                { required: true, message: "银行卡", trigger: "blur" },
+                { min: 15, max: 19, message: "长度在 15位数到19位数", trigger: "blur" }
+           ],
+        },
+     }
   },
   created() {
     this.fetchData();

@@ -56,3 +56,14 @@ export function getMerchantOrder (data) {
     data:data
   })
 }
+
+
+//发货管理
+// export function getDeliverGoods (data) {
+//   return request({
+//     url: '/xmall-front-web/orders/modifyState',
+//     method: 'post',
+//     data:data
+//   })
+// }
+

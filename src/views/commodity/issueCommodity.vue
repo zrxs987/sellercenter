@@ -108,71 +108,54 @@
           <div class="buttonBtn">
             <el-button type="primary" @click="handleCancel()">重置</el-button>
             <el-button type="primary" @click="handleSubmit()">提交</el-button>
-            <el-button type="primary" @click="handleStandard()">添加规格</el-button>
+            <!-- <el-button type="primary" @click="handleStandard()">添加规格</el-button> -->
+            <el-button type = "primary"  :disabled = " openIsDisabled " v-show="buttonShow"   @click = " handleStandard( ) " > 添加规则 </el-button >
+            <el-button type = "primary"  :disabled = " closeIsDisabled "  v-show="buttonAgainst"  @click = " closeBoxCabin( ) " > 重选分类  </el-button > 
           </div>
         </el-form>
       </div>
 
     <!-- 添加规格-->
     <el-dialog
-      class="ui-layout_edit-dialog"
-      title="添加规格"
-      :visible.sync="isShow"
-      width="700px"
+        class="ui-layout_edit-dialog"
+        title="添加规格"
+        :visible.sync="isShow"
+        width="700px"
     >
-        <el-form  class="standardForm clearfix" :model="standard" style='magin-top:30px;' label-width="40px">
-        
-          <div class="standard" v-for="item in spNameList" :key="item.id">
-              <el-form-item > 
-                <span  class="upload-img">{{item}}</span>      
-                <el-input v-model="standard.email"  style="width:120px;"></el-input>
-              </el-form-item>
-              <el-form-item
-                v-for="(domain) in standard.domains"
-                :key="domain.index"
-              >
-                <el-input v-model="domain.size"  style="width:120px;" clearable>
-                </el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="submitForm('standard')">提交</el-button>
-                <el-button @click="addDomain">新增{{item}}</el-button>
-              </el-form-item>
-          </div>
-
-     <el-table
-      :data="tableData"
-      border
-      :header-cell-style="{background:'#dee1e6'}" 
-      style="width: 100%; margin-right: 60px;">
-      <el-table-column
-        prop="id"
-        label="ID"
-        >
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名">
-      </el-table-column>
-      <el-table-column
-        prop="amount1"
-
-        label="数值 1">
-      </el-table-column>
-      <el-table-column
-        prop="amount2"
- 
-        label="数值 2">
-      </el-table-column>
-      <el-table-column
-        prop="amount3"
+    <el-form  class="standardForm clearfix" :model="standard" :rules="standardRule" ref="standard" style='magin-top:30px;' label-width="40px">
     
-        label="数值 3">
-      </el-table-column>
-    </el-table>
+      <div class="standard" v-for="(item,index) in spNameList" :key="item.index">
+          <el-form-item > 
+            <span  class="upload-img">{{item}}</span>      
+            <el-input v-model="standard.email"  style="width:120px;"></el-input>
+          </el-form-item>
+          <el-form-item
+             v-for="(domain) in standard.domains"
+            :key="domain.index"
+          >
+            <el-input v-model="domain.size" style="width:120px;" clearable></el-input>
+            <el-button @click.prevent="removeDomain( domain )">删除</el-button>
+          </el-form-item>
 
-        </el-form> 
-          <div class="footerBtn" style=" margin-left: 240px;">
+          <el-form-item>
+            <el-button type="primary"  @click="submitForm( item,index )">提交</el-button>
+            <el-button  @click="addDomain( item,index )">新增{{item}}</el-button>
+          </el-form-item>
+      </div>
+
+      <el-table
+        :data="tableData"
+         border
+        :header-cell-style="{background:'#dee1e6'}" 
+         style="width: 100%; margin-right: 60px;">
+        <el-table-column  prop="id"   label="尺寸"></el-table-column>
+        <el-table-column  prop="name" label="颜色"></el-table-column>
+        <el-table-column  prop="amount1" label="数值 1"> </el-table-column>
+        <el-table-column  prop="amount2" label="数值 2"> </el-table-column>
+        <el-table-column  prop="amount3" label="数值 3"> </el-table-column>  
+      </el-table>
+    </el-form> 
+          <div class="footerBtn" style="margin-left:240px; margin-top: 30px;">
             <el-button size="small" @click="handleStandardCancel()">取消</el-button>
             <el-button size="small" type="primary" @click="handleStandardAffirm()">确认</el-button>
           </div>
@@ -196,13 +179,15 @@ import { getAddressInfo,getCity } from "@/api/level3Linkage.js";
 import { log } from 'util';
 
 export default {
-  // name:'issueCommodity',
+  name:'issueCommodity',
   components: {
     upload,
     progressBar
   },
   data() {
     return {
+      buttonShow:true,
+      buttonAgainst:false,
       tableData:[],
       //添加规格
       standard:{
@@ -267,22 +252,20 @@ export default {
             trigger: "blur"
            }
         ],
-        add: [
-            {
-            required: true,
-            message: "带*号不能为空",
-            trigger: "blur"
-           }
-        ],
-        // classes: [
+        // add: [
         //     {
         //     required: true,
         //     message: "带*号不能为空",
         //     trigger: "blur"
         //    }
         // ],
+
       },
+      standardRule:{},
       spNameList:[],
+      loading:false,
+      openIsDisabled: false ,
+      closeIsDisabled: false,
     };
   },
   created() {
@@ -323,7 +306,7 @@ export default {
                     type: 'success',
                     duration: 5 * 1000
                   })
-                  }else{
+                 }else{
                   this.$message({
                     message: res.errorMsg,
                     type: 'error',
@@ -389,9 +372,9 @@ export default {
             areaParentId:this.optionList.cityList[val].areaId,
             type: "3"
        }).then(res => {
-       this.optionList.districtList = res.data;
+          this.optionList.districtList = res.data;
     });
-    },
+  },
 
     // 选择分类
     firstData(){
@@ -435,20 +418,22 @@ export default {
 //商品品牌
   handleBrand(){     
     getTrademark().then((res)=>{
-      // console.log(res.data,'res.data')
+      //console.log(res.data,'res.data')
         this.optionList.brand = res.data
     })
   },
 
-  //删除尺寸
-  removeDomain(item) {
+  //删除
+  removeDomain( item ) {
     var index = this.standard.domains.indexOf(item)
     if (index !== -1) {
-      this.standard.domains.splice(index, 1)
+       this.standard.domains.splice(index, 1)
     }
   },
-  //新增尺寸
-  addDomain() {
+  
+  //新增
+  addDomain( item,index ) {
+    // console.log(index,'index')
     this.standard.domains.push({
       size: '',
       key: Date.now()
@@ -456,27 +441,55 @@ export default {
   },
 
 //提交
-submitForm() {
+submitForm( item ) {
   
 },
 
 //获取规格名称
-handleStandard( ) {
-   this.isShow = true
+handleStandard() {
+    this.isShow = true
     getIdStandard({gcId:this.orderPara[0]}).then((res)=>{
 
-      this.standardList = res.data
+     if(res.code == '200'){
+        this.standardList = res.data
+        this.buttonShow = false
+        this.buttonAgainst = true
+     }
 
     for(let i=0;i<this.standardList.length;i++){
        if(this.standardList[i].typeSpecList){
            for(let j=0;j<this.standardList[i].typeSpecList.length;j++) {
               
               this.spNameList.push(this.standardList[i].typeSpecList[j].spec.spName)
+              // console.log(this.spNameList,'this.spNameList')
            }
-
         }
       }
    })
+},
+
+closeBoxCabin() {
+      this.isShow = true
+  //  this .openIsDisabled = true 
+  //  this .closeIsDisabled = false 
+  //   getIdStandard({gcId:this.orderPara[0]}).then((res)=>{
+
+  //    if(res.code == '200'){
+  //       this.standardList = res.data
+  //       this.buttonAgainst = false
+  //       this.buttonShow = true
+  //    }
+
+  //   for(let i=0;i<this.standardList.length;i++){
+  //      if(this.standardList[i].typeSpecList){
+  //          for(let j=0;j<this.standardList[i].typeSpecList.length;j++) {
+              
+  //             this.spNameList.push(this.standardList[i].typeSpecList[j].spec.spName)
+  //             console.log(this.spNameList,'this.spNameList')
+  //          }
+  //       }
+  //     }
+  //  })
 },
 
 //规格取消

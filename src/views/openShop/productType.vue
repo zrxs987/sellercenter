@@ -129,30 +129,30 @@ export default {
         phoneNumber: [
                {
                 required: true,
-                pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
+                pattern: /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/,
                 message: '请输入正确的手机号',
                 trigger: 'blur',
               }
             ],
         modelName: [
             {
-            required: true,
-            message: "带*号不能为空",
-            trigger: "blur"
+              required: true,
+              message: "带*号不能为空",
+              trigger: "blur"
            }
           ],
         radio: [
             {
-            required: true,
-            message: "带*号不能为空",
-            trigger: "blur"
+              required: true,
+              message: "带*号不能为空",
+              trigger: "blur"
            }
         ],
         AAXX: [
             {
-            required: true,
-            message: "带*号不能为空",
-            trigger: "blur"
+              required: true,
+              message: "带*号不能为空",
+              trigger: "blur"
            }
         ],
       },
@@ -230,13 +230,13 @@ export default {
              getProductType( obj ).then(( res )=>{
                    console.log(res,'res')
                 if(res.code ==='200'){
-                  setTimeout(() => {
+                  setTimeout(( ) => {
                       this.$router.push({
                         path:'./foodCategory',
                         query: {
                               scId: this.productType.radio
                             }
-                           });
+                         });
                       }, 1000)          
                 }else{
                       this.$message({

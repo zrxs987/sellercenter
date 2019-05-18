@@ -4,7 +4,7 @@
       <el-row>
         <el-form :inline="true" class="headerForm" style="margin-bottom: 1.5%;">
           <el-col :span="5">
-          <el-form-item label="快递公司" :label-width="formLabelWidth">
+          <el-form-item label="快递公司">
             <el-select
               size="medium"
               placeholder="快递公司"
@@ -20,14 +20,14 @@
             </el-select>
           </el-form-item>
          </el-col>
-         <el-col :span="11">
-          <el-form-item label="发货地址" :label-width="formLabelWidth">
+         <el-col :span="10">
+          <el-form-item label="发货地址">
             <el-select
               size="small"
               placeholder="请选择省"
               v-model="systemInformation.province"
               @change="handleSelectProvince"
-              style="width:25%;"
+              style="width:22%;"
               clearable
             >
               <el-option
@@ -43,7 +43,7 @@
               placeholder="请选择市"
               v-model="systemInformation.city"
               @change="handleSelectCounty"
-              style="width:25%;"
+              style="width:22%;"
               clearable
             >
               <el-option
@@ -57,7 +57,7 @@
               size="small"
               placeholder="请选择区"
               v-model="systemInformation.district"
-              style="width:25%;"
+              style="width:22%;"
               clearable
             >
               <el-option
@@ -69,7 +69,8 @@
             </el-select>
           </el-form-item>
           </el-col>
-          <el-col :span="5">
+
+          <el-col :span="4">
           <el-form-item label="具体地址">
             <el-input
               type="textarea"
@@ -136,6 +137,7 @@ import {
   getCity,
   getLogisticsCompany,
   getMerchantOrder,
+  getDeliverGoods,
 } from "@/api/level3Linkage.js";
 import { getBusinessAddress } from "@/api/locationManage";
 import pagination from "@/components/Pagination/index";
@@ -147,7 +149,7 @@ export default {
   },
   data() {
     return {
-      formLabelWidth: "90px",
+      // formLabelWidth: "90px",
       systemInformation: {
         expressage: "",
         province: "",
@@ -194,7 +196,7 @@ export default {
 
     fetchData() {
       this.loading = true;
-      getMerchantOrder({ storeId: 3, orderState: 20 }) // this.$store.state.user.storeId
+      getMerchantOrder({ storeId:this.$store.state.user.storeId, orderState: 20 }) // this.$store.state.user.storeId
         .then(res => {
            if (res.code === "200") {
             this.loading = false;

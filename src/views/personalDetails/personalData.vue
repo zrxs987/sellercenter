@@ -8,11 +8,11 @@
           <span class="upload-img">店铺头像</span>
           <upload :show="false" @on-Success="bankImgonSuccess"/>
         </el-form-item>
-        <el-form-item label="店铺名称" prop="setPwd">
+        <el-form-item label="店铺名称" prop="setPwd"> 
           <el-input  v-model="personalData.setPwd" style="width:360px;" disabled></el-input>
         </el-form-item>
-        <el-form-item label="开店日期" prop="enterAgain">
-          <el-input  v-model="personalData.enterAgain" style="width:360px;" disabled></el-input>
+        <el-form-item label="开店日期" prop="OpeningDate">
+          <el-input  v-model="personalData.OpeningDate" style="width:360px;" disabled></el-input>
         </el-form-item>
         <el-form-item label="营业执照" prop="enterAgain">
           <el-input placeholder='请输入营业执照名称' v-model="personalData.enterAgain" style="width:360px;"></el-input>
@@ -48,7 +48,8 @@ export default {
   data() {
     return {
       personalData: {
-
+         setPwd:'',
+         OpeningDate:'',
       },
       optionList:{
 
@@ -78,9 +79,15 @@ export default {
         //    }
         // ],
 
-      }
+      },
+      ShopData:{},
     }
   },
+
+  created() {
+    this.fetchData()
+  },
+
   methods: {
     //营业执照
     businessImgonSuccess( key ) {
@@ -95,6 +102,17 @@ export default {
         this.headPortrait = key
     },
 
+     fetchData( ) {
+         getShopData({storeId:this.$store.state.user.storeId}).then((res)=>{
+             if(res.code =='200') {
+               this.ShopData = res.data
+               this.personalData.setPwd = this.ShopData.storeName
+               this.personalData.OpeningDate = this.ShopData.storeTime
+
+             }
+         })
+     },
+
     //提交
     handleSubmit() {
       this.$refs.personalData.validate(res => {
@@ -107,8 +125,21 @@ export default {
                accountOpeningPermit:this.account,
              }
              getShopInfo( obj ).then((res)=>{
-                  console.log(res,444)
-             }) 
+               if(res.code == '200') {
+                    this.$message({
+                  message: res.errorMsg,
+                  type: "success",
+                  duration: 5 * 1000
+                });
+               }else {
+                this.$message({
+                  message: res.errorMsg,
+                  type: "error",
+                  duration: 5 * 1000
+                });
+              }
+
+           }) 
         }
       });
     },

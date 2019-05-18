@@ -89,7 +89,7 @@ export default {
     return {
       loginForm: {
         username: "18870571898",
-        password: "123456"
+        password: "654321"
       },
       loginRules: {
         username: [{ required: true, trigger: "blur" }],
@@ -128,7 +128,7 @@ export default {
          
           this.$store.dispatch("user/login",this.loginForm)
            .then(() => {
-
+                 
                   this.$router.push({ path: '/' })
                   this.loading = false
             })

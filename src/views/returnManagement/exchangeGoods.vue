@@ -152,7 +152,7 @@ export default {
   methods: {
      fetchData() {
       this.loading = true;
-       getReturnManagementList({ storeId: 3, orderGoodsRefundStatus: 3 }) // this.$store.state.user.storeId
+       getReturnManagementList({ storeId:this.$store.state.user.storeId, orderGoodsRefundStatus: 3 }) // this.$store.state.user.storeId
         .then(res => {
            if (res.code === "200") {
             this.loading = false;

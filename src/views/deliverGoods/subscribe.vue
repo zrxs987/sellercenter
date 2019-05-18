@@ -138,7 +138,7 @@ export default {
 
   fetchData() {
      this.loading = true;
-       getMerchantOrder({ storeId: 3, orderState: 30 })   //this.$store.state.user.storeId
+       getMerchantOrder({ storeId:this.$store.state.user.storeId, orderState: 30 })   //this.$store.state.user.storeId
         .then(res => {
           if (res.code === "200") {
             this.loading = false;

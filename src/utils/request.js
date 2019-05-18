@@ -7,7 +7,7 @@ import qs from 'qs'
 // 创建一个axios实例
 const service = axios.create({
   // baseURL: "http://47.112.195.117",   
-  withCredentials: true, // 跨域请求时发送 cookies
+  withCredentials: true, // 跨域请求时发送 cookiesnpm run build:prod
   timeout: 10000, // 请求超时
   // processData : false,
   headers: {
