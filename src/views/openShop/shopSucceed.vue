@@ -11,19 +11,19 @@
       </div>
     </div>
     <!-- 申请开店 -->
-    <el-dialog title="申请开店" :visible.sync="dialogFormVisible" width="23%" @close="handleCloseSystemInfo">
+    <el-dialog title="申请开店" :visible.sync="dialogFormVisible" width="500px" @close="handleCloseSystemInfo">
 
       <el-form :model="formProduct" :rules="formProductRule" ref="formProduct" :label-width="formLabelWidth">
         <el-form-item label="店铺名称" prop="headlines" >
-          <el-input  v-model="formProduct.headlines" placeholder="请输入店铺名称" clearable></el-input>
+          <el-input  v-model="formProduct.headlines" style="width:300px;" placeholder="请输入店铺名称" clearable></el-input>
         </el-form-item>
 
         <el-form-item label="会员名" prop="price">
-          <el-input  v-model="formProduct.price" placeholder="请输入会员名" clearable></el-input>
+          <el-input  v-model="formProduct.price" style="width:300px;" placeholder="请输入会员名" clearable></el-input>
         </el-form-item>
 
         <el-form-item label="商家名称" prop="integral">
-          <el-input  v-model="formProduct.integral" placeholder="请输入商家名" clearable></el-input>
+          <el-input  v-model="formProduct.integral" style="width:300px;" placeholder="请输入商家名" clearable></el-input>
         </el-form-item>
         </el-form>
       <div  class="dialog-footer">
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
         dialogFormVisible:false,
-        formLabelWidth: "80px",
+        formLabelWidth: "100px",
         //上传产品定义
         formProduct: {
             headlines: "",
@@ -131,8 +131,8 @@ export default {
     storeId() {
         getStoreId({memberId:this.$store.state.user.memberId}).then((res)=>{
 
-          this.$store.state.user.storeId = res.data
-
+          // this.$store.state.user.storeId = res.data
+          console.log(res)
       })
     },
 
@@ -162,11 +162,6 @@ export default {
     background-color: #fce8e8 !important;
     color: #dc0203;
   }
-}
-.dialog-footer{
-    text-align: center;
-    margin-left: -10px;
-    margin-top: 50px;
 }
 
 </style>

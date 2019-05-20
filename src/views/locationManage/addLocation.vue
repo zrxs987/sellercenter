@@ -75,6 +75,8 @@
       </div> -->
     <el-table
       :data="tableData"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
       border
       fit
       :header-cell-style="{background:'#dee1e6'}" 
@@ -177,6 +179,7 @@ export default {
           cityList: [],
           districtList: []
       },
+      loading:false,
      //地址规则
     personalDataRule: {
       adventure: [
@@ -279,8 +282,9 @@ export default {
 
  //列表数据
  tableDataInof() {
+    this.loading = true;
     getMerchantSite({storeId:20}).then((res)=>{   //this.$store.state.user.storeId,
-          // console.log(res,'res')
+          this.loading = false;
           this.tableData = res.data
       })
     },
@@ -344,7 +348,7 @@ handleAffirm() {
 
 //弹框取消
 handleCancel() {
-   
+   this.editData = {}
 },
 
 //设为默认地址

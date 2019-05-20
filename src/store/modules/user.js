@@ -55,6 +55,7 @@ const actions = {
         commit('SET_SHOPID', data.sellerId)
         commit('SET_SELLERNAME', data.sellerName)
         commit('SET_MEMBERID', data.memberId)
+        commit('SET_STOREID', data.storeId)
 
         setToken(data.token)
         resolve()

@@ -119,7 +119,7 @@ export default {
   },
   data() {
     return {
-      tableData:[ ],
+      tableData:[],
       isShow:false,
       isShowBarter:false,
       listLoading: true,
@@ -152,7 +152,7 @@ export default {
   methods: {
      fetchData() {
       this.loading = true;
-       getReturnManagementList({ storeId:this.$store.state.user.storeId, orderGoodsRefundStatus: 3 }) // this.$store.state.user.storeId
+       getReturnManagementList({ storeId:3, orderGoodsRefundStatus: 3 }) // this.$store.state.user.storeId
         .then(res => {
            if (res.code === "200") {
             this.loading = false;

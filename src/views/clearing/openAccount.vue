@@ -55,7 +55,15 @@
       </el-table-column>
       <el-table-column label="金额"  align="center" prop="goodsAmount">
       </el-table-column>
+
       <el-table-column align="center" label="订单状态" prop="orderState">
+        <template slot-scope="scope" >
+          <span  v-if="scope.row.orderState == 0" >已取消</span>
+          <span  v-if="scope.row.orderState == 10" >未付款</span>
+          <span  v-if="scope.row.orderState == 20" >已付款</span>
+          <span  v-if="scope.row.orderState == 30" >已发货</span>
+          <span  v-if="scope.row.orderState == 40" >已收货</span>
+        </template>
       </el-table-column>
       <!-- <el-table-column align="center" label="发货状态">
       </el-table-column>

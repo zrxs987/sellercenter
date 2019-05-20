@@ -115,31 +115,31 @@
         </el-form>
       </div>
 
-    <!-- 添加规格-->
+    <!-- 添加规格   //  v-for="(domain) in standard[`domains${index+1}`]" -->
     <el-dialog
         class="ui-layout_edit-dialog"
         title="添加规格"
         :visible.sync="isShow"
-        width="700px"
+        width="900px"
     >
     <el-form  class="standardForm clearfix" :model="standard" :rules="standardRule" ref="standard" style='magin-top:30px;' label-width="40px">
-    
-      <div class="standard" v-for="(item,index) in spNameList" :key="item.index">
+
+         <div class="standard" v-for="(item,index) in spNameList" :key="item.index">
           <el-form-item > 
             <span  class="upload-img">{{item}}</span>      
-            <el-input v-model="standard.email"  style="width:120px;"></el-input>
+            <el-input  v-model="standard[item]"  style="width:120px;"></el-input>
           </el-form-item>
           <el-form-item
-             v-for="(domain) in standard.domains"
+             v-for="(domain) in standard[`domains${index+1}`]"
             :key="domain.index"
           >
-            <el-input v-model="domain.size" style="width:120px;" clearable></el-input>
-            <el-button @click.prevent="removeDomain( domain )">删除</el-button>
+            <el-input v-model="domain[`${item}`]" style="width:120px;" clearable></el-input>
+            <el-button @click.prevent="removeDomain( domain,index+1 )">删除</el-button>
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary"  @click="submitForm( item,index )">提交</el-button>
-            <el-button  @click="addDomain( item,index )">新增{{item}}</el-button>
+            <el-button type="primary"  @click="submitForm( item,index,`domains${index+1}`)">提交</el-button>
+            <el-button  @click="addDomain(item,index+1)">新增{{item}}</el-button>
           </el-form-item>
       </div>
 
@@ -148,8 +148,9 @@
          border
         :header-cell-style="{background:'#dee1e6'}" 
          style="width: 100%; margin-right: 60px;">
-        <el-table-column  prop="id"   label="尺寸"></el-table-column>
-        <el-table-column  prop="name" label="颜色"></el-table-column>
+
+        <el-table-column  prop="id"   label="颜色"></el-table-column>
+        <el-table-column  prop="name" label="尺寸"></el-table-column>
         <el-table-column  prop="amount1" label="数值 1"> </el-table-column>
         <el-table-column  prop="amount2" label="数值 2"> </el-table-column>
         <el-table-column  prop="amount3" label="数值 3"> </el-table-column>  
@@ -191,8 +192,9 @@ export default {
       tableData:[],
       //添加规格
       standard:{
-        domains: [ {size:''}],
-        Colour: [ {kind:''}],
+        domains1: [],//渲染新增的数组
+        domains2: [],
+        domains3: [],
       },
       standardList:[],
       isShow:false,
@@ -252,20 +254,14 @@ export default {
             trigger: "blur"
            }
         ],
-        // add: [
-        //     {
-        //     required: true,
-        //     message: "带*号不能为空",
-        //     trigger: "blur"
-        //    }
-        // ],
-
       },
       standardRule:{},
       spNameList:[],
+      spIdList:[],
       loading:false,
       openIsDisabled: false ,
       closeIsDisabled: false,
+
     };
   },
   created() {
@@ -424,25 +420,33 @@ export default {
   },
 
   //删除
-  removeDomain( item ) {
-    var index = this.standard.domains.indexOf(item)
+  removeDomain(item,num ) {
+    var index =this.standard[`domains${num}`].indexOf(item)
     if (index !== -1) {
-       this.standard.domains.splice(index, 1)
+       this.standard[`domains${num}`].splice(index, 1)
     }
   },
   
   //新增
-  addDomain( item,index ) {
-    // console.log(index,'index')
-    this.standard.domains.push({
-      size: '',
-      key: Date.now()
-    });
+  addDomain(itemname,index) {
+  this.standard[`domains${index}`].push({[itemname]:''});
   },
 
 //提交
-submitForm( item ) {
-  
+submitForm( item,index,arrName ) {
+
+  let obj = {
+    spValueName:this.standard[item],
+    spId:'',
+    spValueSort:JSON.stringify(this.standard[arrName]),
+    gcId:this.orderPara[0],
+    storeId:this.$store.state.user.storeId,
+}
+
+  getAddStandard( obj ).then(( res )=>{
+     console.log(res,'res')
+  })
+
 },
 
 //获取规格名称
@@ -457,14 +461,19 @@ handleStandard() {
      }
 
     for(let i=0;i<this.standardList.length;i++){
+        this.gcId=this.standardList[i].gcId//获取当前分类的唯一标识
        if(this.standardList[i].typeSpecList){
            for(let j=0;j<this.standardList[i].typeSpecList.length;j++) {
               
               this.spNameList.push(this.standardList[i].typeSpecList[j].spec.spName)
-              // console.log(this.spNameList,'this.spNameList')
+              this.spIdList.push(this.standardList[i].typeSpecList[j].spec.spId)
+              
            }
+         console.log(this.standardList,'this.standardList')
         }
+         
       }
+       
    })
 },
 
@@ -533,7 +542,6 @@ handleStandardAffirm() {
 }
 .upload-img {
   margin-left: -30px;
-  // margin-top: 80px;
   line-height: 40px;
 }
 

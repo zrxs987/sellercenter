@@ -20,68 +20,7 @@
             </el-select>
           </el-form-item>
          </el-col>
-         <el-col :span="10">
-          <el-form-item label="发货地址">
-            <el-select
-              size="small"
-              placeholder="请选择省"
-              v-model="systemInformation.province"
-              @change="handleSelectProvince"
-              style="width:22%;"
-              clearable
-            >
-              <el-option
-                v-for="(item, value) in optionList.provinceList"
-                :key="value"
-                :value="value"
-                :label="item.areaName"
-              ></el-option>
-            </el-select>
 
-            <el-select
-              size="small"
-              placeholder="请选择市"
-              v-model="systemInformation.city"
-              @change="handleSelectCounty"
-              style="width:22%;"
-              clearable
-            >
-              <el-option
-                v-for="(item, value) in optionList.cityList"
-                :key="value"
-                :value="value"
-                :label="item.areaName"
-              ></el-option>
-            </el-select>
-            <el-select
-              size="small"
-              placeholder="请选择区"
-              v-model="systemInformation.district"
-              style="width:22%;"
-              clearable
-            >
-              <el-option
-                v-for="(item, value) in optionList.districtList"
-                :key="value"
-                :value="value"
-                :label="item.areaName"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          </el-col>
-
-          <el-col :span="4">
-          <el-form-item label="具体地址">
-            <el-input
-              type="textarea"
-              class="site"
-              size="medium"
-              :rows="2"
-              resize="none"
-              v-model="systemInformation.site"
-            ></el-input>
-          </el-form-item>
-         </el-col>
           <div class="btnClick">
           <el-button type="primary" @click="handleInquire">发货</el-button>
           <el-button type="primary" @click="handleReset">重置</el-button>
@@ -93,24 +32,33 @@
     <el-table
       ref="multipleTable"
       :data="tableData"
+      v-loading="loading"
       element-loading-text="拼命加载中"
       border
       fit
       :header-cell-style="{background:'#dee1e6'}"
       @selection-change="handleSelectionChange"
     > 
-
       <el-table-column type="selection" align="center"/>
       <el-table-column type="index" :index="indexMethod" align="center" label="序号" width="50">
       </el-table-column>
-      <el-table-column align="center" label="订单编号" width="240" prop="orderSn">
+      <el-table-column align="center" label="订单编号" width="220" prop="orderSn">
       </el-table-column>
-      <el-table-column label="商品名称" align="center" width="260" prop="goodsName">
+      <el-table-column label="商品名称" align="center" width="240" prop="goodsName">
       </el-table-column>
       <el-table-column label="金额" align="center" prop="goodsAmount">
       </el-table-column>
+
       <el-table-column align="center" label="订单状态" prop="orderState">
+        <template slot-scope="scope" >
+          <span  v-if="scope.row.orderState == 0" >已取消</span>
+          <span  v-if="scope.row.orderState == 10" >未付款</span>
+          <span  v-if="scope.row.orderState == 20" >已付款</span>
+          <span  v-if="scope.row.orderState == 30" >已发货</span>
+          <span  v-if="scope.row.orderState == 40" >已收货</span>
+        </template>
       </el-table-column>
+
       <el-table-column align="center" label="支付状态">
         <template slot_scope="scope">
           <span>已支付</span>
@@ -125,7 +73,25 @@
       </el-table-column>
       <el-table-column align="center" label="成交时间" prop="finnshedTime">
       </el-table-column>
+      <el-table-column prop="address" align="center" label="操作">
+        <template slot-scope="scope">
+                <span style="color: #409eff;cursor:pointer;margin-left: 0;" class="line" @click="handleCompile(scope.row)" >编辑</span>
+        </template>
+     </el-table-column>
     </el-table>
+
+    <!-- 快递编号 -->
+    <el-dialog title="快递编号" :visible.sync="dialogFormVisible" width="500px" @close="handleCloseSystemInfo">
+
+      <el-form :model="serialNumber" :rules="serialNumberRule" ref="serialNumber" :label-width="formLabelWidth">
+        <el-form-item label="快递编号" prop="headlines" >
+          <el-input  v-model="serialNumber.headlines" style="width:300px;" placeholder="请输入快递编号" clearable></el-input>
+        </el-form-item> 
+        <div  class="dialog-footer">
+            <el-button type="primary" @click="handleModifyPwd()">提交</el-button>
+        </div> 
+       </el-form>
+    </el-dialog>
 
     <pagination :total="50"/>
   </div>
@@ -133,13 +99,12 @@
 
 <script>
 import {
-  getAddressInfo,
-  getCity,
   getLogisticsCompany,
   getMerchantOrder,
-  getDeliverGoods,
 } from "@/api/level3Linkage.js";
 import { getBusinessAddress } from "@/api/locationManage";
+import { getTrackingNumber } from "@/api/deliverGoods";
+import {getBusinessState} from '@/api/classify'
 import pagination from "@/components/Pagination/index";
 
 export default {
@@ -149,21 +114,17 @@ export default {
   },
   data() {
     return {
-      // formLabelWidth: "90px",
+      dialogFormVisible:false,
+      formLabelWidth: "100px",
       systemInformation: {
         expressage: "",
-        province: "",
-        city: "",
-        district: "",
-        site: ""
       },
       //下拉数据
       optionList: {
         expressage: [],
-        provinceList: [],
-        cityList: [],
-        districtList: []
       },
+      loading:false,
+      orderId:'',
       //分页
       listQuery: {
         page: 1,
@@ -178,13 +139,25 @@ export default {
       tableSelectData:[],
       //勾选id
       paySnId:'',
+      //弹框规则
+    serialNumberRule: {
+      headlines: [
+            {
+            required: true,
+            message: "带*号不能为空",
+            trigger: "blur"
+           }
+         ],
+        },
+      serialNumber:{
+         headlines:'',
+      },
     };
   },
 
   created() {
     this.fetchData();
     this._getLogisticsCompany();
-    this.handleCall();
   },
 
   methods: {
@@ -228,19 +201,13 @@ export default {
           this.tableSelectData.forEach(item => {
               idArr.push(item.orderId)
           });
-          this.orderIdId = idArr.join(',')
+       this.orderIdId = idArr.join(',')
     },
 
     //发货
     handleInquire() {
-        let obj = {
-          areaId:this.systemInformation.province,
-          cityId:this.systemInformation.city,
-          address:this.systemInformation.site,
-          expressage:this.systemInformation.expressage,
-          paySn:this.orderIdId,
-        }
-        getBusinessAddress( obj ).then((res)=>{
+ 
+        getBusinessState( { storeId:this.$store.state.user.storeId, orderState: 30 } ).then((res)=>{
           
             if (!this.tableSelectData.length) {
                   this.$message.warning("请先勾选数据！");
@@ -268,38 +235,6 @@ export default {
       this.systemInformation = {};
     },
      
-     handleCall(val){
-       this.vals = val;
-      getAddressInfo({
-        areaParentId: val,
-        type: "1"
-      }).then(data => {
-        this.optionList.provinceList = ''
-        this.optionList.provinceList = data.data;
-      })
-     },
-
-    //省
-    handleSelectProvince(val) {
-         getCity({
-               areaParentId:++val,
-               type: "2"
-        }).then(res => {
-          this.optionList.cityList=''
-          this.optionList.cityList = res.data;
-      });
-    },
-
-    //市
-    handleSelectCounty(val) {
-            getCity({
-            areaParentId:this.optionList.cityList[val].areaId,
-            type: "3"
-       }).then(res => {
-        this.optionList.districtList = ''
-       this.optionList.districtList = res.data;
-    });
-    },
  
     //物流公司
     _getLogisticsCompany() {
@@ -309,7 +244,51 @@ export default {
           this.optionList.expressage = res.data;
         })
       })
-     },
+   },
+
+  //编辑操作
+  handleCompile( row ) {
+     this.orderId = row.orderId
+     this.dialogFormVisible = true
+  },
+
+  
+ //提交
+  handleModifyPwd( row ) {
+    // console.log(row,'row1111')
+     this.$refs.serialNumber.validate(res => {
+        if (res) {
+           
+           let  obj = {
+             orderId:this.orderId,
+             shippingCode:this.serialNumber.headlines,
+           }
+
+           getTrackingNumber( obj ).then(( res )=>{
+            if(res.code === '200'){
+                 this.$message({
+                  message: res.errorMsg,
+                  type: "success",
+                  duration: 5 * 1000
+            });
+                this.dialogFormVisible = false
+             }else {
+                this.$message({
+                  message: res.errorMsg,
+                  type: "error",
+                  duration: 5 * 1000
+              });
+             }
+           })
+        }
+     })
+  },
+
+  // 弹框关闭
+  handleCloseSystemInfo() {
+    this.$refs.serialNumber.resetFields();
+    this.serialNumber = {}
+  },
 
   }
 };
@@ -319,4 +298,5 @@ export default {
 .headerForm {
   height: 30px;
 }
+
 </style>

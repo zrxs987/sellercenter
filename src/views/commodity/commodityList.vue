@@ -31,11 +31,16 @@
     <el-table
       ref="multipleTable"
       :data="tableData"
+      v-loading="loading"
       element-loading-text="拼命加载中"
       border
       fit
       :header-cell-style="{background:'#dee1e6'}" 
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column type="selection" align="center"/>
+      <el-table-column type="index" :index="indexMethod" align="center" label="序号" width="50">
+      </el-table-column>
       <el-table-column align="center" label="商品ID" prop="goodsId">
       </el-table-column>
       <el-table-column  align="center" label="商品名称" prop="goodsName">
@@ -53,6 +58,19 @@
       </el-table-column>
     </el-table>
 
+  <!-- 弹框 -->
+    <el-dialog title="编辑商品" :visible.sync="dialogFormVisible" width="500px" @close="handleCloseSystemInfo">
+
+      <el-form :model="CommoditiesEditor" :rules="CommoditiesEditorRule" ref="CommoditiesEditor" :label-width="formLabelWidth">
+        <el-form-item label="快递编号" prop="headlines" >
+          <el-input  v-model="CommoditiesEditor.headlines" style="width:300px;" placeholder="请输入快递编号" clearable></el-input>
+        </el-form-item> 
+        <div  class="dialog-footer">
+            <el-button type="primary" @click="handleModifyPwd()">提交</el-button>
+        </div> 
+       </el-form>
+    </el-dialog>
+
      <pagination  :total='50'/>
   </div>
 </template>
@@ -68,7 +86,11 @@ export default {
   },
   data() {
     return {
+      dialogFormVisible:false,
+      formLabelWidth: "100px",
       tableData: null,
+      tableSelectData:[],
+      loading:false,
       //分页
       listQuery: {
         page: 1,
@@ -84,7 +106,19 @@ export default {
       commodity:{
          state:'',
       },
-      formLabelWidth:'100px',
+    //弹框规则
+    CommoditiesEditorRule: {
+      headlines: [
+            {
+            required: true,
+            message: "带*号不能为空",
+            trigger: "blur"
+           }
+         ],
+        },
+      CommoditiesEditor:{
+         headlines:'',
+      },
 
     }
   },
@@ -112,18 +146,52 @@ methods: {
         });
      },
 
+  //table序号
+  indexMethod(index) {
+      return ++index * 1;
+  },
+
+  //表格勾选
+  handleSelectionChange( row ) {
+    this.tableSelectData = row;
+    //     let idArr = [];
+    //     this.tableSelectData.forEach(item => {
+    //         idArr.push(item.orderId)
+    //     });
+    // this.orderIdId = idArr.join(',')
+  },
+
   //查询按钮
   handleInquire() {
+      if (!this.tableSelectData.length) {
+        this.$message.warning("请先勾选数据！");
+        return;
+    }
+  },
 
+  //编辑
+  handleCompile() {
+    this.dialogFormVisible = true
+  },
+
+   //提交
+  handleModifyPwd( ) {
+     this.$refs.CommoditiesEditor.validate(res => {
+        if (res) {
+           
+        }
+     })
+  },
+
+  // 弹框关闭
+  handleCloseSystemInfo() {
+        this.$refs.CommoditiesEditor.resetFields();
+        this.CommoditiesEditor = {}
   },
 
   //重置按钮
   handleReset() {
      this.commodity = {}
-  },
-  //编辑
-  handleCompile() {
-    
   },
 
   }

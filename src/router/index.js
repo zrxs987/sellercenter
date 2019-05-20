@@ -480,6 +480,29 @@ export const constantRoutes = [
 },
 
 
+ //邮费管理
+ {
+  path: '/postage',
+  component: Layout,
+  redirect: '/postage',
+  name: 'postage',
+  alwaysShow: true ,
+  meta: {
+    title: '邮费管理',
+    icon: 'form'
+  },
+  children: [
+    {
+      path: 'postageManage',
+      component: () => import('@/views/postage/postageManage.vue'),
+      name: 'postageManage',
+      meta: { title: '邮费模板'},
+    },
+
+  ]
+},
+
+
 // {
 //   path: '/404',
 //   component: () => import('@/views/404'),

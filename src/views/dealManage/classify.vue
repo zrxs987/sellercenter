@@ -30,7 +30,7 @@
                </el-col>
               <div class="btnClick">
                 <el-button type="primary"  @click="handleInquire">查询</el-button>
-                <el-button type="primary"   @click="handleReset">重置</el-button>
+                <el-button type="primary"  @click="handleReset">重置</el-button>
                 <el-button type="primary"  @click="handleDownload">导出</el-button>
               </div>          
             </el-form>
@@ -45,10 +45,10 @@
                <span class="longString"></span>
                <li :class="{active:shows==4}" @click="handleAlready">已发货订单</li>
                <span class="longString"></span>
-               <li :class="{active:shows==5}" @click="handleRefund">退款中订单</li>
+               <!-- <li :class="{active:shows==5}" @click="handleRefund">退款中订单</li>
                <span class="longString"></span>
                <li :class="{active:shows==6}" @click="handleExchangeGoods">换货订单</li>
-               <span class="longString"></span>
+               <span class="longString"></span> -->
                <li :class="{active:shows==7}" @click="handleEvaluate">待评价订单</li>
                <span class="longString"></span>
                <li :class="{active:shows==8}" @click="handleAccomplish">完成订单</li>
@@ -59,7 +59,8 @@
     </div>
 
    <div class="el-table-box">
-           <el-table v-loading="loading"
+           <el-table
+            v-loading="loading"
             style="width: 100%;"
             :header-cell-style="{background:'#dee1e6'}" 
             element-loading-text="拼命加载中"
@@ -73,7 +74,17 @@
             <el-table-column prop="buyerName" align="center" label="收款人" ></el-table-column>
             <el-table-column prop="goodsName" align="center" label="商品名称" width="260"></el-table-column>
             <el-table-column prop="goodsAmount" align="center" label="金额"  width="110"></el-table-column>
-            <el-table-column prop="orderState" align="center" label="订单状态" ></el-table-column>
+
+            <el-table-column align="center" label="订单状态" prop="orderState">
+              <template slot-scope="scope" >
+                <span  v-if="scope.row.orderState == 0" >已取消</span>
+                <span  v-if="scope.row.orderState == 10" >未付款</span>
+                <span  v-if="scope.row.orderState == 20" >已付款</span>
+                <span  v-if="scope.row.orderState == 30" >已发货</span>
+                <span  v-if="scope.row.orderState == 40" >已收货</span>
+              </template>
+            </el-table-column>
+            
             <!-- <el-table-column prop="alipay" align="center" label="支付状态"></el-table-column>
             <el-table-column prop="deliverGoods" align="center" label="发货状态"></el-table-column> -->
             <el-table-column prop="paymentCode" align="center" label="支付方式"></el-table-column>
@@ -332,70 +343,71 @@ deleteData(orderSn){
   },
 
   //退款中订单
-  handleRefund () {
-      this.shows = 5;
-      this.loading = true;
-      getReturnManagementList({ storeId:3, orderGoodsRefundStatus: 2 })
-        .then(res => {
-            if (res.code === "200") {
-            this.loading = false;
-            res.data = res.data.map(item =>{
-              return {
-                  ...item,
-                  addTime: item.orders.addTime,
-                  goodsAmount: item.orders.goodsAmount,
-                  orderSn: item.orders.orderSn,
-              }
-            })
-          this.tableData = res.data;
-        } else {
-          this.$message({
-            message: res.errorMsg,
-            type: "error",
-            duration: 5 * 1000
-          });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  },
+  // handleRefund () {
+  //     this.shows = 5;
+  //     this.loading = true;
+  //     getReturnManagementList({ storeId:3, orderGoodsRefundStatus: 2 })
+  //       .then(res => {
+  //           if (res.code === "200") {
+  //           this.loading = false;
+  //           res.data = res.data.map(item =>{
+  //             return {
+  //                 ...item,
+  //                 addTime: item.orders.addTime,
+  //                 goodsAmount: item.orders.goodsAmount,
+  //                 orderSn: item.orders.orderSn,
+  //             }
+  //           })
+  //         this.tableData = res.data;
+  //       } else {
+  //         this.$message({
+  //           message: res.errorMsg,
+  //           type: "error",
+  //           duration: 5 * 1000
+  //         });
+  //       }
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // },
 
   //换货订单
-  handleExchangeGoods () {
-      this.shows = 6;
-      this.loading = true;
-      getReturnManagementList({ storeId: 3, orderGoodsRefundStatus: 3 })
-      .then(res => {
-          if (res.code === "200") {
-          this.loading = false;
-          res.data = res.data.map(item =>{
-            return {
-                ...item,
-                addTime: item.orders.addTime,
-                goodsAmount: item.orders.goodsAmount,
-                orderSn: item.orders.orderSn,
-            }
-          })
-          this.tableData = res.data;
-        } else {
-          this.$message({
-            message: res.errorMsg,
-            type: "error",
-            duration: 5 * 1000
-          });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  },
+  // handleExchangeGoods () {
+  //     this.shows = 6;
+  //     this.loading = true;
+  //     getReturnManagementList({ storeId: 3, orderGoodsRefundStatus: 3 })
+  //     .then(res => {
+  //         if (res.code === "200") {
+  //         this.loading = false;
+  //         res.data = res.data.map(item =>{
+  //           return {
+  //               ...item,
+  //               addTime: item.orders.addTime,
+  //               goodsAmount: item.orders.goodsAmount,
+  //               orderSn: item.orders.orderSn,
+  //           }
+  //         })
+  //         this.tableData = res.data;
+  //       } else {
+  //         this.$message({
+  //           message: res.errorMsg,
+  //           type: "error",
+  //           duration: 5 * 1000
+  //         });
+  //       }
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // },
 
   //待评价订单
   handleEvaluate() {
     this.shows = 7;
     this.loading=true;
       getEvaluate({storeId:3,evaluationState:1}).then((res)=>{
+          console.log(res,'res11111')
             if(res.code === '200') {
               this.loading=false;
                 res.data = res.data.map( item => {
@@ -405,7 +417,9 @@ deleteData(orderSn){
                     
                   }
                 })
-                this.tableData = res.data;
+                
+                this.tableData = res.data.list;
+                console.log(this.tableData,'this.tableData1111')
             }else{
             this.$message({
               message: res.errorMsg,
@@ -507,7 +521,7 @@ deleteData(orderSn){
         width: 2px;
         float: left;
         margin-top: 20px;
-        margin-left: 20px;
+        margin-left: 30px;
       }
       .active {
          color: red;

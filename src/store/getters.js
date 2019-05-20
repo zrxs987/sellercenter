@@ -7,5 +7,6 @@ const getters = {
   sellerId: state=> state.user.sellerId,
   sellerName: state=> state.user.sellerName,
   memberId: state=> state.user.memberId,
+  storeId: state=> state.user.storeId,
 }
 export default getters

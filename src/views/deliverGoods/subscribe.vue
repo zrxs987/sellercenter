@@ -21,6 +21,7 @@
     <el-table
       ref="multipleTable"
       :data="tableData"
+      v-loading="loading"
       element-loading-text="拼命加载中"
       border
       fit
@@ -36,9 +37,16 @@
       <el-table-column label="金额"  align="center" prop="orderState">
 
       </el-table-column>
-      <el-table-column align="center" label="订单状态" prop="orderState">
-
-      </el-table-column>
+            <el-table-column align="center" label="订单状态" prop="orderState">
+              <template slot-scope="scope" >
+                <span  v-if="scope.row.orderState == 0" >已取消</span>
+                <span  v-if="scope.row.orderState == 10" >未付款</span>
+                <span  v-if="scope.row.orderState == 20" >已付款</span>
+                <span  v-if="scope.row.orderState == 30" >已发货</span>
+                <span  v-if="scope.row.orderState == 40" >已收货</span>
+              </template>
+        </el-table-column>
+        
       <el-table-column align="center" label="寄件信息" prop="sender">
         <template slot_scope="scope">
           <span class="examine">查看详情</span>
@@ -121,6 +129,7 @@ export default {
           statusList:[],
           technicianList:[],
       },
+      loading:false,
       //发件弹框
       expressage:{
 
@@ -138,7 +147,7 @@ export default {
 
   fetchData() {
      this.loading = true;
-       getMerchantOrder({ storeId:this.$store.state.user.storeId, orderState: 30 })   //this.$store.state.user.storeId
+       getMerchantOrder({ storeId:3, orderState: 30 })   //this.$store.state.user.storeId
         .then(res => {
           if (res.code === "200") {
             this.loading = false;

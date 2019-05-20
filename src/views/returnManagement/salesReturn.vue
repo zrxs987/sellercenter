@@ -92,7 +92,7 @@ export default {
   methods: {
      fetchData() {
       this.loading = true;
-       getReturnManagementList({ storeId: this.$store.state.user.storeId, orderGoodsRefundStatus: 2 }) // this.$store.state.user.storeId
+       getReturnManagementList({ storeId: 3, orderGoodsRefundStatus: 2 }) // this.$store.state.user.storeId
         .then(res => {
            if (res.code === "200") {
             this.loading = false;
@@ -122,10 +122,6 @@ export default {
     indexMethod(index) {
       return ++index * 1;
     },
-    //年月日时间
-    changeStartTime() {
-
-    },
 
     handleSelectionChange(val) {
       this.multipleSelection = val
@@ -154,6 +150,7 @@ export default {
         })
       }
     },
+    
     // //查询按钮
     // handleInquire() {
 
@@ -162,6 +159,7 @@ export default {
     // handleReset() {
        
     // },
+
     //快递信息
     handleExchangeGoods( ) {
        this.isShowBarter = true
